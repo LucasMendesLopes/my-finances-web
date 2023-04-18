@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-import { DeleteFinance } from '-services/finances';
-import { IFinancesTable } from '-src/types';
+import { Loading } from '-components/index';
+import { deleteFinance } from '-src/services';
+import { IFinances } from '-src/types';
 import { formatNumber } from '-src/utils';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,22 +12,26 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { ArrowCircleDown, ArrowCircleUp, Trash } from 'phosphor-react';
 
-import { Loading } from '../Loading';
-import { DeleteButton, EmptyTableSpan, TableElementsContainer } from './styles';
+import {
+  DeleteButton,
+  EmptyTableSpan,
+  TableElementsContainer
+} from './styled-finances-table';
 
-export const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
+interface IFinancesTable {
+  rows: IFinances[];
+  isLoadingValues: boolean;
+}
+
+const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
   const [deleteOpacity, setDeleteOpacity] = useState(false);
 
   const columns = [
     { id: 'date', label: 'Data', minWidth: 170 },
     { id: 'description', label: 'Descrição', minWidth: 100 },
     { id: 'value', label: 'Valor', minWidth: 100 },
-    { id: 'type', label: 'Tipo', minWidth: 100 },
+    { id: 'type', label: 'Tipo', minWidth: 100 }
   ];
-
-  const deleteFinance = (id: string) => {
-    void DeleteFinance(id);
-  };
 
   const handleRenderIcon = (type: string) => {
     if (type === 'entrada') return <ArrowCircleUp color="#21b53e" size={25} />;
@@ -117,3 +122,5 @@ export const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
     </TableElementsContainer>
   );
 };
+
+export default FinancesTable;

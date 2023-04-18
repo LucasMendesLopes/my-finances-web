@@ -1,11 +1,11 @@
+import { Card } from '-components/index';
 import {
   ArrowCircleDown,
   ArrowCircleUp,
   CurrencyCircleDollar,
 } from 'phosphor-react';
 
-import { Card } from '../Card';
-import { CardsContainer } from './styles';
+import { CardsContainer } from './styled-value-cards';
 
 interface IValueCards {
   cashInflows: number;
@@ -14,7 +14,7 @@ interface IValueCards {
   isLoadingValues: boolean;
 }
 
-export const ValueCards = ({
+const ValueCards = ({
   cashInflows,
   cashOutflows,
   total,
@@ -52,3 +52,5 @@ export const ValueCards = ({
     </CardsContainer>
   );
 };
+
+export default ValueCards;

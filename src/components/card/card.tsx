@@ -1,10 +1,18 @@
-import { ICard } from '-src/types';
+import { ReactElement } from 'react';
+
+import { Loading } from '-components/index';
 import { formatNumber } from '-src/utils';
 
-import { Loading } from '../Loading';
-import { Container, CardValue, TitleContainer } from './styles';
+import { Container, CardValue, TitleContainer } from './styled-card';
 
-export const Card = ({ title, icon, isLoadingValues, value }: ICard) => {
+interface ICard {
+  title: string;
+  icon: ReactElement;
+  isLoadingValues: boolean;
+  value: number;
+}
+
+const Card = ({ title, icon, isLoadingValues, value }: ICard) => {
   return (
     <Container>
       <TitleContainer>
@@ -23,3 +31,5 @@ export const Card = ({ title, icon, isLoadingValues, value }: ICard) => {
     </Container>
   );
 };
+
+export default Card;

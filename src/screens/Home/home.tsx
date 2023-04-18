@@ -1,39 +1,43 @@
-/* eslint-disable @typescript-eslint/await-thenable */
 import { useEffect, useState } from 'react';
 
-import { FinancesTable } from '-components/FinancesTable';
-import { InputsForm } from '-components/InputsForm';
-import { ValueCards } from '-components/ValueCards';
-import { financesCollectionRef } from '-services/finances';
+import { FinancesTable, InputsForm, ValueCards } from '-src/components/index';
+import { useAuth } from '-src/hooks';
+import { financesCollectionRef } from '-src/services/finances.service';
 import { IFinances } from '-src/types';
-import { onSnapshot } from 'firebase/firestore';
+import { onSnapshot, query, where } from 'firebase/firestore';
 
 import * as s from './styled-home';
 
-export const Home = () => {
+const Home = () => {
   const [isLoadingValues, setIsLoadingValues] = useState(false);
   const [finances, setFinances] = useState<IFinances[]>([]);
 
+  const { logout, userUid, isSigned } = useAuth();
+
   useEffect(() => {
-    setIsLoadingValues(true);
+    if (userUid) {
+      setIsLoadingValues(true);
+      const q = query(financesCollectionRef, where('userUid', '==', userUid));
 
-    onSnapshot(financesCollectionRef, (resp) => {
-      const array: IFinances[] = [];
+      const subscribe = onSnapshot(q, (resp) => {
+        const array: IFinances[] = [];
 
-      resp.docs.forEach((doc) => {
-        array.push({
-          id: doc.id,
-          date: doc.data().date,
-          description: doc.data().description,
-          type: doc.data().type,
-          value: doc.data().value,
+        resp.docs.forEach((doc) => {
+          array.push({
+            id: doc.id,
+            date: doc.data().date,
+            description: doc.data().description,
+            type: doc.data().type,
+            value: doc.data().value,
+          });
         });
-      });
 
-      setFinances(array);
-      setIsLoadingValues(false);
-    });
-  }, []);
+        setFinances(array);
+        setIsLoadingValues(false);
+      });
+      return () => subscribe();
+    }
+  }, [isSigned]);
 
   const cashInflows = finances
     ?.filter((item: IFinances) => item.type === 'entrada')
@@ -49,6 +53,8 @@ export const Home = () => {
     <s.Container>
       <s.Header>
         <h1>Finanças</h1>
+
+        <button onClick={logout}>SignOut</button>
       </s.Header>
 
       <s.ElementsContainer>
@@ -66,3 +72,5 @@ export const Home = () => {
     </s.Container>
   );
 };
+
+export default Home;

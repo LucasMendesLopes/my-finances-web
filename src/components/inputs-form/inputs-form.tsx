@@ -1,16 +1,20 @@
 import { useState } from 'react';
 
-import { financesCollectionRef } from '-services/finances';
+import { useAuth } from '-src/hooks';
+import { financesCollectionRef } from '-src/services/finances.service';
 import { Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { addDoc } from 'firebase/firestore';
 
-import { Button, InputsFormContainer, InputsContainer } from './styles';
+import { InputsFormContainer, InputsContainer } from './styled-inputs-form';
+import Button from '../button/button';
 
-export const InputsForm = () => {
+const InputsForm = () => {
   const [description, setDescription] = useState('');
   const [value, setValue] = useState<number | ''>('');
   const [isEntrada, setIsEntrada] = useState(true);
   const [isSaida, setIsSaida] = useState(false);
+
+  const { userUid } = useAuth();
 
   const clearInputs = () => {
     setDescription('');
@@ -30,6 +34,7 @@ export const InputsForm = () => {
       description,
       type: isEntrada ? 'entrada' : 'saida',
       value,
+      userUid,
     });
 
     clearInputs();
@@ -88,3 +93,5 @@ export const InputsForm = () => {
     </InputsFormContainer>
   );
 };
+
+export default InputsForm;
