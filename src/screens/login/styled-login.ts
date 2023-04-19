@@ -11,7 +11,7 @@ export const Container = styled.div`
 export const LoginBg = styled.div`
   width: 50%;
   height: 100%;
-  background-image: url('./src/assets/login-bg.png');
+  background-image: url('/assets/images/login-bg.png');
   background-size: cover;
   background-position: 55% 50%;
   background-color: #174c4c;
@@ -29,9 +29,14 @@ export const FormContainer = styled.div`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
+  width: 65%;
   max-width: 90%;
   align-items: center;
   gap: 30px;
+
+  img#logo {
+    width: 60%;
+  }
 `;
 
 export const InputsContainer = styled.div`

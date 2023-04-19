@@ -32,11 +32,7 @@ const Register = () => {
 
       <s.FormContainer>
         <s.Form onSubmit={handleSubmit}>
-          <img
-            style={{ width: '65%' }}
-            src="./src/assets/logo-readme.png"
-            alt=""
-          />
+          <img src="/assets/logos/logo.png" alt="logotipo" id="logo" />
 
           <s.InputsContainer>
             <TextField

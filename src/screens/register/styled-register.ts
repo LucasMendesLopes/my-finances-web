@@ -11,7 +11,7 @@ export const Container = styled.div`
 export const RegisterBg = styled.div`
   width: 50%;
   height: 100%;
-  background-image: url('./src/assets/register-bg.png');
+  background-image: url('/assets/images/register-bg.png');
   background-size: cover;
   background-position: 55% 50%;
   background-color: #174c4c;
@@ -30,8 +30,13 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   max-width: 90%;
+  width: 65%;
   align-items: center;
   gap: 30px;
+
+  img#logo {
+    width: 60%;
+  }
 `;
 
 export const InputsContainer = styled.div`

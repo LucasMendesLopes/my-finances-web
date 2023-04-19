@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./src/assets/logo-readme.png" height="200px" alt="My Finances" />
+  <img src="./public/assets/logos/logo.png" height="200px" alt="My Finances" />
 </p>
 
 # My Finances
@@ -35,13 +35,13 @@ Pelo terminal:
 
 - Crie sua conta gratuitamente no Firebase: <link>https://firebase.google.com/?hl=pt<link> e siga o passo a passo nas imagens a seguir:
 
- <img src="./src/assets/1.png" />
- <img src="./src/assets/2.png" />
- <img src="./src/assets/3.png" />
- <img src="./src/assets/4.png" />
- <img src="./src/assets/5.png" />
- <img src="./src/assets/6.png" />
- <img src="./src/assets/7.png" />
+ <img src="./public/assets/images/1.png" />
+ <img src="./public/assets/images/2.png" />
+ <img src="./public/assets/images/3.png" />
+ <img src="./public/assets/images/4.png" />
+ <img src="./public/assets/images/5.png" />
+ <img src="./public/assets/images/6.png" />
+ <img src="./public/assets/images/7.png" />
 
 ## Variáveis de Ambiente - ENVS
 
