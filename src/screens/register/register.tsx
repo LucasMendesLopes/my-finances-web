@@ -1,22 +1,63 @@
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { Button, Loading } from '-src/components';
-import { register } from '-src/services';
-import { TextField } from '@mui/material';
+import { Button, InputEmail, InputPassword, Loading } from '-src/components';
+import { signUp } from '-src/services';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import * as s from './styled-register';
 
+export interface IRegisterFormInputs {
+  email: string;
+  confirmEmail: string;
+  password: string;
+  confirmPassword: string;
+}
+
+const SignUpSchema = yup
+  .object({
+    email: yup
+      .string()
+      .required('Digite seu email.')
+      .matches(
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+        'Email inválido!'
+      ),
+    confirmEmail: yup
+      .string()
+      .oneOf([yup.ref('email')], 'Os emails não coincidem!')
+      .required('Confirme seu email.'),
+    password: yup
+      .string()
+      .required('Digite sua senha.')
+      .matches(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/,
+        'Senha inválida!'
+      ),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref('password')], 'As senhas não coincidem!')
+      .required('Confirme sua senha.'),
+  })
+  .required();
+
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<IRegisterFormInputs>({
+    resolver: yupResolver(SignUpSchema),
+  });
+
+  const onSubmit = async (data: IRegisterFormInputs) => {
     setIsLoadingRegister(true);
 
-    await register(email, password)
+    await signUp(data.email, data.password)
       .then((resp) => {
         toast.success(resp);
       })
@@ -28,38 +69,48 @@ const Register = () => {
 
   return (
     <s.Container>
-      <s.RegisterBg />
-
       <s.FormContainer>
-        <s.Form onSubmit={handleSubmit}>
+        <s.Form onSubmit={handleSubmit(onSubmit)}>
           <img src="/assets/logos/logo.png" alt="logotipo" id="logo" />
 
           <s.InputsContainer>
-            <TextField
-              id="outlined-basic"
-              size="small"
-              fullWidth
-              type="text"
-              label="E-mail"
-              variant="outlined"
-              value={email || ''}
-              onChange={(e) => setEmail(e.target.value)}
+            <InputEmail
+              name="email"
+              label="Digite seu e-mail"
+              control={control}
+              error={errors.email?.message}
             />
 
-            <TextField
-              id="outlined-basic"
-              size="small"
-              fullWidth
-              type="text"
-              label="Senha"
-              variant="outlined"
-              value={password || ''}
-              onChange={(e) => setPassword(e.target.value)}
+            <InputEmail
+              name="confirmEmail"
+              label="Confirme seu e-mail"
+              control={control}
+              error={errors.confirmEmail?.message}
+            />
+
+            <InputPassword
+              name="password"
+              label="Digite sua senha"
+              control={control}
+              error={errors?.password?.message}
+            />
+
+            <InputPassword
+              name="confirmPassword"
+              label="Confirme sua senha"
+              control={control}
+              error={errors?.confirmPassword?.message}
             />
           </s.InputsContainer>
 
           <s.ButtonContainer>
-            <Button width="100%" disabled={!email || !password}>
+            <span>
+              A senha deve ter no mínimo 6 dígitos, ao menos 1 letra maiúscula,
+              1 letra minúscula, 1 caracter númerico ou especial (a-z, A-Z, 0-9,
+              @-_ç&*#$%).
+            </span>
+
+            <Button width="100%">
               {isLoadingRegister ? (
                 <Loading type="spin" color="#ffffff" width={30} height={30} />
               ) : (
@@ -69,6 +120,8 @@ const Register = () => {
           </s.ButtonContainer>
         </s.Form>
       </s.FormContainer>
+
+      <s.RegisterBg />
     </s.Container>
   );
 };

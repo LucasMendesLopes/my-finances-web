@@ -16,7 +16,7 @@ const login = (email: string, password: string): Promise<string> => {
 
         switch (error.code) {
           case 'auth/invalid-email':
-            message = 'Email incorreto!';
+            message = 'Email inválido!';
             break;
 
           case 'auth/user-not-found':
@@ -36,7 +36,7 @@ const login = (email: string, password: string): Promise<string> => {
   });
 };
 
-const register = (email: string, password: string): Promise<string> => {
+const signUp = (email: string, password: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
@@ -59,4 +59,4 @@ const register = (email: string, password: string): Promise<string> => {
   });
 };
 
-export { login, register };
+export { login, signUp };

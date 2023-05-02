@@ -17,7 +17,7 @@ body {
     height: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #e6e6e6;
+    background-color: #ffffff;
 
     #root{
         height: 100%;

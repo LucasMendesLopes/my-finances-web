@@ -6,6 +6,7 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 `;
 
 export const RegisterBg = styled.div`
@@ -23,14 +24,14 @@ export const FormContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  padding: 20px;
 `;
 
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  max-width: 90%;
-  width: 65%;
+  max-width: 100%;
+  width: 70vh;
   align-items: center;
   gap: 30px;
 
@@ -46,6 +47,16 @@ export const InputsContainer = styled.div`
   gap: 20px;
 `;
 
+export const InputContainer = styled.div<{ type?: string }>`
+  display: flex;
+  flex-direction: ${({ type }) => (type === 'password' ? 'row' : 'column')};
+  gap: 10px;
+
+  p.error-message {
+    color: #b52121;
+  }
+`;
+
 export const Input = styled.input`
   padding: 10px;
   border: 1px solid;
@@ -59,4 +70,8 @@ export const ButtonContainer = styled.div`
   gap: 15px;
   justify-content: center;
   align-items: center;
+
+  span {
+    color: #39393a;
+  }
 `;

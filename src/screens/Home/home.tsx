@@ -54,7 +54,7 @@ const Home = () => {
       <s.Header>
         <h1>Finanças</h1>
 
-        <button onClick={logout}>SignOut</button>
+        <button onClick={logout}>Sair</button>
       </s.Header>
 
       <s.ElementsContainer>

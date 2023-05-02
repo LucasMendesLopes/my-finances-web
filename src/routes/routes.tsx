@@ -1,12 +1,11 @@
 import { lazy, Suspense } from 'react';
-
 import { Routes as Switch, Route } from 'react-router-dom';
 
 import { ROUTE_PATHS } from '-src/constants';
+import { useAuth } from '-src/hooks';
 
 import PrivateRoutes from './private-routes';
 import PublicRoutes from './public-routes';
-import { useAuth } from '-src/hooks';
 
 const Home = lazy(() =>
   import('-src/screens').then((module) => ({ default: module.Home }))

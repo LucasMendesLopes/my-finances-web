@@ -6,6 +6,8 @@ export const Container = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
+  background-color: #e6e6e6;
+  overflow: auto;
 `;
 
 export const Header = styled.div`
@@ -14,10 +16,15 @@ export const Header = styled.div`
   height: 25vh;
   text-align: center;
   background-color: #297373;
+  color: #ffffff;
+  padding-top: 20px;
 
-  h1 {
-    margin-top: 20px;
-    color: #ffffff;
+  button {
+    position: absolute;
+    top: 20px;
+    right: 23px;
+    color: white;
+    font-size: 1rem;
   }
 `;
 

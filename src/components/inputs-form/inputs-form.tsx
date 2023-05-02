@@ -5,8 +5,8 @@ import { financesCollectionRef } from '-src/services/finances.service';
 import { Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { addDoc } from 'firebase/firestore';
 
-import { InputsFormContainer, InputsContainer } from './styled-inputs-form';
 import Button from '../button/button';
+import { InputsFormContainer, InputsContainer } from './styled-inputs-form';
 
 const InputsForm = () => {
   const [description, setDescription] = useState('');
@@ -54,7 +54,6 @@ const InputsForm = () => {
     <InputsFormContainer>
       <InputsContainer>
         <TextField
-          id="outlined-basic"
           type="text"
           label="Descrição"
           variant="outlined"
@@ -63,7 +62,6 @@ const InputsForm = () => {
         />
 
         <TextField
-          id="outlined-basic"
           type="number"
           label="Valor"
           variant="outlined"

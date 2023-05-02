@@ -6,6 +6,7 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 `;
 
 export const LoginBg = styled.div`
@@ -23,14 +24,14 @@ export const FormContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  padding: 20px;
 `;
 
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  width: 65%;
-  max-width: 90%;
+  max-width: 100%;
+  width: 70vh;
   align-items: center;
   gap: 30px;
 
@@ -44,6 +45,16 @@ export const InputsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+`;
+
+export const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  p.error-message {
+    color: #b52121;
+  }
 `;
 
 export const Input = styled.input`
@@ -65,6 +76,10 @@ export const RegisterRedirect = styled.div`
   display: flex;
   gap: 5px;
   font-weight: bold;
+
+  span {
+    color: #39393a;
+  }
 
   a {
     color: #174c4c;

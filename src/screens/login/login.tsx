@@ -1,22 +1,47 @@
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { Button, Loading } from '-src/components';
+import { Button, InputEmail, InputPassword, Loading } from '-src/components';
 import { login } from '-src/services';
-import { TextField } from '@mui/material';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import * as s from './styled-login';
 
+export interface ILoginFormInputs {
+  email: string;
+  password: string;
+}
+
+const SignSchema = yup
+  .object({
+    email: yup
+      .string()
+      .required('Digite seu email.')
+      .matches(
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+        'Email inválido!'
+      ),
+    password: yup.string().required('Digite sua senha.'),
+  })
+  .required();
+
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<ILoginFormInputs>({
+    resolver: yupResolver(SignSchema),
+  });
+
+  const onSubmit = async (data: ILoginFormInputs) => {
     setIsLoadingLogin(true);
 
-    await login(email, password)
+    await login(data.email, data.password)
       .then((resp) => {
         toast.success(resp);
       })
@@ -31,35 +56,29 @@ const Login = () => {
       <s.LoginBg />
 
       <s.FormContainer>
-        <s.Form onSubmit={handleSubmit}>
+        <s.Form onSubmit={handleSubmit(onSubmit)}>
           <img src="/assets/logos/logo.png" alt="logotipo" id="logo" />
 
           <s.InputsContainer>
-            <TextField
-              id="outlined-basic"
-              size="small"
-              fullWidth
-              type="text"
+            <InputEmail
+              name="email"
               label="E-mail"
-              variant="outlined"
-              value={email || ''}
-              onChange={(e) => setEmail(e.target.value)}
+              control={control}
+              rules={{}}
+              error={errors.email?.message}
             />
 
-            <TextField
-              id="outlined-basic"
-              size="small"
-              fullWidth
-              type="text"
+            <InputPassword
+              name="password"
               label="Senha"
-              variant="outlined"
-              value={password || ''}
-              onChange={(e) => setPassword(e.target.value)}
+              control={control}
+              rules={{}}
+              error={errors?.password?.message}
             />
           </s.InputsContainer>
 
           <s.ButtonContainer>
-            <Button width="100%" disabled={!email || !password}>
+            <Button width="100%">
               {isLoadingLogin ? (
                 <Loading type="spin" color="#ffffff" width={30} height={30} />
               ) : (
