@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { IButton } from './button';
 
 export const Button = styled.button<IButton>`
-  font-size: 1rem;
+  font-size: ${({ fontSize }) => fontSize};
   font-weight: bold;
   background-color: #1f5e5e;
   color: #ffffff;

@@ -1,9 +1,31 @@
+import { useNavigate } from 'react-router-dom';
+
+import { Button } from '-src/components';
+
 import * as s from './styled-not-found';
 
 const NotFound = () => {
+  const navigate = useNavigate();
+
   return (
     <s.Container>
-      <h1>PAGE NOT FOUND</h1>
+      <p id="warning">Página não encontrada!</p>
+
+      <s.ImagePageNotFound
+        src="assets/images/not-found.png"
+        alt="duas pessoas segurando cabos desconectados"
+      />
+
+      <p id="redirect">Não se preocupe, volte para a página de Login (:</p>
+
+      <Button
+        id="button-redirect"
+        width="200px"
+        fontSize="1.5rem"
+        onClick={() => navigate('/login')}
+      >
+        Voltar
+      </Button>
     </s.Container>
   );
 };
