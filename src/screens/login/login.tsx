@@ -78,7 +78,7 @@ const Login = () => {
           </s.InputsContainer>
 
           <s.ButtonContainer>
-            <Button width="100%">
+            <Button fontSize="1.2rem" width="100%">
               {isLoadingLogin ? (
                 <Loading type="spin" color="#ffffff" width={30} height={30} />
               ) : (
