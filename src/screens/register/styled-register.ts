@@ -36,7 +36,15 @@ export const Form = styled.form`
   gap: 30px;
 
   img#logo {
-    width: 60%;
+    width: 45%;
+  }
+
+  @media (max-width: 1366px) {
+    width: 70vh;
+
+    button {
+      font-size: 1rem;
+    }
   }
 `;
 

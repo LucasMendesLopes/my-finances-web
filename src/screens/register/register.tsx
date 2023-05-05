@@ -106,11 +106,11 @@ const Register = () => {
           <s.ButtonContainer>
             <span>
               A senha deve ter no mínimo 6 dígitos, ao menos 1 letra maiúscula,
-              1 letra minúscula, 1 caracter númerico ou especial (a-z, A-Z, 0-9,
-              @-_ç&*#$%).
+              1 letra minúscula, 1 caractere númerico ou especial (a-z, A-Z,
+              0-9, @-_ç&*#$%).
             </span>
 
-            <Button width="100%">
+            <Button fontSize="1.2rem" width="100%">
               {isLoadingRegister ? (
                 <Loading type="spin" color="#ffffff" width={30} height={30} />
               ) : (
