@@ -6,7 +6,7 @@ import { Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { addDoc } from 'firebase/firestore';
 
 import Button from '../button/button';
-import { InputsFormContainer, InputsContainer } from './styled-inputs-form';
+import * as s from './styled-inputs-form';
 
 const InputsForm = () => {
   const [description, setDescription] = useState('');
@@ -51,8 +51,8 @@ const InputsForm = () => {
   };
 
   return (
-    <InputsFormContainer>
-      <InputsContainer>
+    <s.InputsFormContainer>
+      <s.InputsContainer>
         <TextField
           type="text"
           size="small"
@@ -72,17 +72,19 @@ const InputsForm = () => {
           onChange={(e) => setValue(Number(e.target.value))}
         />
 
-        <FormControlLabel
-          color="red"
-          control={<Checkbox checked={isEntrada} onChange={handleCheckbox} />}
-          label="entrada"
-        />
+        <div id="checbox-container">
+          <FormControlLabel
+            color="red"
+            control={<Checkbox checked={isEntrada} onChange={handleCheckbox} />}
+            label="entrada"
+          />
 
-        <FormControlLabel
-          control={<Checkbox checked={isSaida} onChange={handleCheckbox} />}
-          label="saída"
-        />
-      </InputsContainer>
+          <FormControlLabel
+            control={<Checkbox checked={isSaida} onChange={handleCheckbox} />}
+            label="saída"
+          />
+        </div>
+      </s.InputsContainer>
 
       <Button
         onClick={handleAddFinance}
@@ -90,7 +92,7 @@ const InputsForm = () => {
       >
         Adicionar
       </Button>
-    </InputsFormContainer>
+    </s.InputsFormContainer>
   );
 };
 

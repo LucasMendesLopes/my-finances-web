@@ -44,7 +44,7 @@ export const DeleteButton = styled.button<{ deleteOpacity: boolean }>`
   transition: all 0.5s ease;
   transform: translateX(${({ deleteOpacity }) => (deleteOpacity ? 0 : 100)}px);
 
-  @media (max-width: 800px) {
+  @media (max-width: 950px) {
     margin-left: 32px;
     transform: translateX(0);
   }

@@ -9,7 +9,17 @@ export const InputsFormContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 40px;
+  padding: 30px;
+
+  @media (max-width: 950px) {
+    flex-direction: column;
+    height: auto;
+    align-items: start;
+
+    button {
+      width: 100%;
+    }
+  }
 `;
 
 export const InputsContainer = styled.div`
@@ -24,25 +34,14 @@ export const InputsContainer = styled.div`
   .MuiTextField-root {
     min-width: 40%;
   }
-`;
 
-export const Button = styled.button`
-  font-size: 1rem;
-  background-color: #1f5e5e;
-  color: #ffffff;
-  cursor: pointer;
-  border: none;
-  border-radius: 7px;
-  width: 100px;
-  height: 45px;
-  transition: all 0.5s ease;
-
-  :hover {
-    background-color: #174c4c;
+  div#checbox-container {
+    display: flex;
   }
 
-  :disabled {
-    cursor: not-allowed;
-    background-color: #676767;
+  @media (max-width: 950px) {
+    width: 100%;
+    flex-direction: column;
+    margin-bottom: 20px;
   }
 `;
