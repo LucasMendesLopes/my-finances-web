@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-
 export const TableElementsContainer = styled.div<{ isLoadingValues: boolean }>`
   width: 100%;
   min-height: 115px;
@@ -16,10 +15,23 @@ export const TableElementsContainer = styled.div<{ isLoadingValues: boolean }>`
     border-radius: 7px;
     overflow-x: hidden;
   }
+
+  .MuiTableCell-root {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 800px) {
+    .MuiTableContainer-root {
+      overflow-x: auto;
+    }
+
+    .MuiTableCell-root {
+      font-size: 1.05rem;
+    }
+  }
 `;
 
 export const EmptyTableSpan = styled.span`
-  /* padding: 16px; */
   color: #39393a;
   font-size: 2rem;
   font-weight: 600;
@@ -31,4 +43,9 @@ export const DeleteButton = styled.button<{ deleteOpacity: boolean }>`
   cursor: pointer;
   transition: all 0.5s ease;
   transform: translateX(${({ deleteOpacity }) => (deleteOpacity ? 0 : 100)}px);
+
+  @media (max-width: 800px) {
+    margin-left: 32px;
+    transform: translateX(0);
+  }
 `;

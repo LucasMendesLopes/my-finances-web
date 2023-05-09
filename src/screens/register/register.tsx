@@ -110,7 +110,7 @@ const Register = () => {
               0-9, @-_ç&*#$%).
             </span>
 
-            <Button fontSize="1.2rem" width="100%">
+            <Button width="100%">
               {isLoadingRegister ? (
                 <Loading type="spin" color="#ffffff" width={30} height={30} />
               ) : (

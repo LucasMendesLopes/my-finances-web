@@ -36,8 +36,7 @@ export const Container = styled.div`
     }
 
     button {
-      width: 150px;
-      font-size: 1rem;
+      font-size: 1.2rem;
     }
   }
 `;

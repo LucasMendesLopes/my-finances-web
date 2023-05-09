@@ -4,18 +4,20 @@ import { Loading } from '-components/index';
 import { deleteFinance } from '-src/services';
 import { IFinances } from '-src/types';
 import { formatNumber } from '-src/utils';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import { ArrowCircleDown, ArrowCircleUp, Trash } from 'phosphor-react';
 
 import {
   DeleteButton,
   EmptyTableSpan,
-  TableElementsContainer
+  TableElementsContainer,
 } from './styled-finances-table';
 
 interface IFinancesTable {
@@ -27,10 +29,10 @@ const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
   const [deleteOpacity, setDeleteOpacity] = useState(false);
 
   const columns = [
-    { id: 'date', label: 'Data', minWidth: 170 },
-    { id: 'description', label: 'Descrição', minWidth: 100 },
-    { id: 'value', label: 'Valor', minWidth: 100 },
-    { id: 'type', label: 'Tipo', minWidth: 100 }
+    { id: 'date', label: 'Data', width: 170 },
+    { id: 'description', label: 'Descrição', width: 100 },
+    { id: 'value', label: 'Valor', width: 100 },
+    { id: 'type', label: 'Tipo', width: 100 },
   ];
 
   const handleRenderIcon = (type: string) => {
@@ -72,7 +74,7 @@ const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
-                    style={{ minWidth: column.minWidth, fontWeight: 'bold' }}
+                    style={{ width: column.width, fontWeight: 'bold' }}
                   >
                     {column.label}
                   </TableCell>
@@ -98,7 +100,7 @@ const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
                     {columns.map((column) => {
                       const value = (row as { [k in string]: any })[column.id];
                       return (
-                        <TableCell key={column.id} className="test">
+                        <TableCell key={column.id}>
                           {handleRenderValue(column.id, value, row.id)}
                         </TableCell>
                       );

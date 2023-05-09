@@ -19,6 +19,10 @@ export const Header = styled.div`
   color: #ffffff;
   padding-top: 20px;
 
+  h1 {
+    font-size: 2rem;
+  }
+
   button {
     position: absolute;
     top: 20px;

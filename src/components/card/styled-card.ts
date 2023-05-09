@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 400px;
+  flex: 1;
+  min-width: 10%;
   height: 150px;
   display: flex;
   flex-direction: column;
@@ -35,7 +36,11 @@ export const TitleContainer = styled.div`
 `;
 
 export const CardValue = styled.span<{ value?: number }>`
-  color: ${({ value }) => value && value < 0 ? "#b52121" : "#39393a"};
+  color: ${({ value }) => (value && value < 0 ? '#b52121' : '#39393a')};
   font-size: 2rem;
   font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
 `;

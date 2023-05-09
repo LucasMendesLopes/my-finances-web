@@ -55,6 +55,7 @@ const InputsForm = () => {
       <InputsContainer>
         <TextField
           type="text"
+          size="small"
           label="Descrição"
           variant="outlined"
           value={description || ''}
@@ -63,6 +64,7 @@ const InputsForm = () => {
 
         <TextField
           type="number"
+          size="small"
           label="Valor"
           variant="outlined"
           value={value || ''}

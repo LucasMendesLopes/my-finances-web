@@ -21,7 +21,6 @@ const NotFound = () => {
       <Button
         id="button-redirect"
         width="200px"
-        fontSize="1.5rem"
         onClick={() => navigate('/login')}
       >
         Voltar
