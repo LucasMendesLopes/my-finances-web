@@ -23,12 +23,16 @@ export const Header = styled.div`
     font-size: 2rem;
   }
 
-  button {
+  #logout-button {
     position: absolute;
     top: 20px;
     right: 23px;
-    color: white;
-    font-size: 1rem;
+    cursor: pointer;
+
+    :hover {
+      text-shadow: 0px 0px 5px 5px black;
+      transition: all 0.5s ease;
+    }
   }
 `;
 

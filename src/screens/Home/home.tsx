@@ -5,6 +5,7 @@ import { useAuth } from '-src/hooks';
 import { financesCollectionRef } from '-src/services/finances.service';
 import { IFinances } from '-src/types';
 import { onSnapshot, query, where } from 'firebase/firestore';
+import { SignOut } from 'phosphor-react';
 
 import * as s from './styled-home';
 
@@ -54,7 +55,13 @@ const Home = () => {
       <s.Header>
         <h1>Finanças</h1>
 
-        <button onClick={logout}>Sair</button>
+        <SignOut
+          alt="sair"
+          id="logout-button"
+          onClick={logout}
+          size={25}
+          weight="regular"
+        />
       </s.Header>
 
       <s.ElementsContainer>
