@@ -24,9 +24,13 @@ const Home = () => {
         const array: IFinances[] = [];
 
         resp.docs.forEach((doc) => {
+          const dateFormated = new Date(
+            doc.data().date.seconds * 1000
+          ).toLocaleDateString();
+
           array.push({
             id: doc.id,
-            date: doc.data().date,
+            date: dateFormated,
             description: doc.data().description,
             type: doc.data().type,
             value: doc.data().value,
@@ -36,6 +40,7 @@ const Home = () => {
         setFinances(array);
         setIsLoadingValues(false);
       });
+
       return () => subscribe();
     }
   }, [isSigned]);

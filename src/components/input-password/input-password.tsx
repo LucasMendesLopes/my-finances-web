@@ -43,7 +43,6 @@ const InputPassword = ({
       render={({ field: { value, onChange } }) => (
         <s.InputContainer>
           <TextField
-            size="small"
             fullWidth
             type={viewPassword ? 'text' : 'password'}
             label={label}

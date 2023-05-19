@@ -38,7 +38,6 @@ const InputEmail = ({
       render={({ field: { value, onChange } }) => (
         <s.InputContainer>
           <TextField
-            size="small"
             fullWidth
             type="text"
             label={label}

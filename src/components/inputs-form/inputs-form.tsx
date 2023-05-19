@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '-src/hooks';
 import { financesCollectionRef } from '-src/services/finances.service';
 import { Checkbox, FormControlLabel, TextField } from '@mui/material';
-import { addDoc } from 'firebase/firestore';
+import { addDoc, Timestamp } from 'firebase/firestore';
 
 import Button from '../button/button';
 import * as s from './styled-inputs-form';
@@ -22,15 +22,10 @@ const InputsForm = () => {
   };
 
   const handleAddFinance = async () => {
-    const dateObj = new Date();
-    const month = dateObj.getMonth() + 1;
-    const day = dateObj.getDate();
-    const year = dateObj.getFullYear();
-
-    const newdate = `${day}/${month}/${year}`;
+    const dateTimeStamp = Timestamp.fromDate(new Date());
 
     await addDoc(financesCollectionRef, {
-      date: newdate,
+      date: dateTimeStamp,
       description,
       type: isEntrada ? 'entrada' : 'saida',
       value,
@@ -55,7 +50,6 @@ const InputsForm = () => {
       <s.InputsContainer>
         <TextField
           type="text"
-          size="small"
           label="Descrição"
           variant="outlined"
           value={description || ''}
@@ -64,7 +58,6 @@ const InputsForm = () => {
 
         <TextField
           type="number"
-          size="small"
           label="Valor"
           variant="outlined"
           value={value || ''}
