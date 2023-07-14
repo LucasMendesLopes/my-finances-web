@@ -43,7 +43,7 @@ const InputEmail = ({
             label={label}
             variant="outlined"
             onChange={(e) => handleChange(e, onChange)}
-            value={value}
+            value={value || ''}
           />
           {error && <p className="error-message">{error}</p>}
         </s.InputContainer>

@@ -48,7 +48,7 @@ const InputPassword = ({
             label={label}
             variant="outlined"
             onChange={(e) => handleChange(e, onChange)}
-            value={value}
+            value={value || ''}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
