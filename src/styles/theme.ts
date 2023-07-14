@@ -18,3 +18,10 @@ export const theme = createTheme({
     },
   },
 });
+
+export const colors = {
+  header: '#297373',
+  button: '#1f5e5e',
+  white: '#ffffff',
+  darkRed: '#b52121',
+};

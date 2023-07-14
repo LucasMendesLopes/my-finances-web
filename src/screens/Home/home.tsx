@@ -4,7 +4,7 @@ import { FinancesTable, InputsForm, ValueCards } from '-src/components/index';
 import { useAuth } from '-src/hooks';
 import { financesCollectionRef } from '-src/services/finances.service';
 import { IFinances } from '-src/types';
-import { onSnapshot, query, where } from 'firebase/firestore';
+import { onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { SignOut } from 'phosphor-react';
 
 import * as s from './styled-home';
@@ -18,7 +18,11 @@ const Home = () => {
   useEffect(() => {
     if (userUid) {
       setIsLoadingValues(true);
-      const q = query(financesCollectionRef, where('userUid', '==', userUid));
+      const q = query(
+        financesCollectionRef,
+        where('userUid', '==', userUid),
+        orderBy('date', 'desc')
+      );
 
       const subscribe = onSnapshot(q, (resp) => {
         const array: IFinances[] = [];

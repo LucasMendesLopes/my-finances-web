@@ -3,7 +3,14 @@ import { useState } from 'react';
 import { useAuth } from '-src/hooks';
 import { financesCollectionRef } from '-src/services/finances.service';
 import { Checkbox, FormControlLabel, TextField } from '@mui/material';
-import { addDoc, Timestamp } from 'firebase/firestore';
+import {
+  LocalizationProvider,
+  DatePicker as XDatePicker,
+} from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
+import { Timestamp, addDoc } from 'firebase/firestore';
 
 import Button from '../button/button';
 import * as s from './styled-inputs-form';
@@ -13,6 +20,7 @@ const InputsForm = () => {
   const [value, setValue] = useState<number | ''>('');
   const [isEntrada, setIsEntrada] = useState(true);
   const [isSaida, setIsSaida] = useState(false);
+  const [dateValue, setDateValue] = useState(format(new Date(), 'MM/dd/yyyy'));
 
   const { userUid } = useAuth();
 
@@ -22,10 +30,8 @@ const InputsForm = () => {
   };
 
   const handleAddFinance = async () => {
-    const dateTimeStamp = Timestamp.fromDate(new Date());
-
     await addDoc(financesCollectionRef, {
-      date: dateTimeStamp,
+      date: Timestamp.fromDate(new Date(dateValue)),
       description,
       type: isEntrada ? 'entrada' : 'saida',
       value,
@@ -45,15 +51,31 @@ const InputsForm = () => {
     }
   };
 
+  const handleChangeDate = (e: Date) => {
+    const newDate = format(new Date(e), 'MM/dd/yyyy');
+    setDateValue(newDate);
+  };
+
   return (
     <s.InputsFormContainer>
       <s.InputsContainer>
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
+          <XDatePicker
+            slotProps={{
+              popper: { placement: 'auto' },
+            }}
+            onChange={(e: any) => handleChangeDate(e)}
+            defaultValue={new Date(dateValue)}
+            value={new Date(dateValue)}
+          />
+        </LocalizationProvider>
+
         <TextField
           type="text"
           label="Descrição"
           variant="outlined"
           value={description || ''}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e: any) => setDescription(e.target.value)}
         />
 
         <TextField
@@ -62,7 +84,7 @@ const InputsForm = () => {
           variant="outlined"
           value={value || ''}
           inputProps={{ min: 1 }}
-          onChange={(e) => setValue(Number(e.target.value))}
+          onChange={(e: any) => setValue(Number(e.target.value))}
         />
 
         <div id="checbox-container">

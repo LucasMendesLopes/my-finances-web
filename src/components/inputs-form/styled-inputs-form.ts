@@ -11,7 +11,7 @@ export const InputsFormContainer = styled.div`
   justify-content: space-between;
   padding: 30px;
 
-  @media (max-width: 950px) {
+  @media (max-width: 1160px) {
     flex-direction: column;
     height: auto;
     align-items: start;
@@ -39,7 +39,11 @@ export const InputsContainer = styled.div`
     display: flex;
   }
 
-  @media (max-width: 950px) {
+  @media (max-width: 1660px) {
+    width: 50%;
+  }
+
+  @media (max-width: 1160px) {
     width: 100%;
     flex-direction: column;
     margin-bottom: 20px;
