@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { Button } from '-src/components';
+import { CustomButton } from '-src/components';
 
 import * as s from './styled-not-found';
 
@@ -18,13 +18,11 @@ const NotFound = () => {
 
       <p id="redirect">Não se preocupe, volte para a página de Login (:</p>
 
-      <Button
-        id="button-redirect"
-        width="200px"
+      <CustomButton
+        text="Voltar"
+        sx={{ maxWidth: '12.5rem' }}
         onClick={() => navigate('/login')}
-      >
-        Voltar
-      </Button>
+      />
     </s.Container>
   );
 };

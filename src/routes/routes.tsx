@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes as Switch, Route } from 'react-router-dom';
 
-import Fallback from '-src/components/fallback/fallback';
+import { Fallback } from '-components/index';
 import { ROUTE_PATHS } from '-src/constants';
 import { useAuth } from '-src/hooks';
 

@@ -1,3 +1,4 @@
+import { colors } from '-src/styles/theme';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -15,7 +16,7 @@ export const LoginBg = styled.div`
   background-image: url('/assets/images/login-bg.png');
   background-size: cover;
   background-position: 55% 50%;
-  background-color: #174c4c;
+  background-color: ${colors.blue200};
 `;
 
 export const FormContainer = styled.div`
@@ -61,7 +62,7 @@ export const InputContainer = styled.div`
   gap: 10px;
 
   p.error-message {
-    color: #b52121;
+    color: ${colors.red};
   }
 `;
 
@@ -86,11 +87,11 @@ export const RegisterRedirect = styled.div`
   font-weight: bold;
 
   span {
-    color: #39393a;
+    color: ${colors.grey200};
   }
 
   a {
-    color: #174c4c;
+    color: ${colors.blue200};
     text-decoration: none;
 
     :hover {

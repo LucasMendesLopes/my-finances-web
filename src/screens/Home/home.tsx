@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { FinancesTable, InputsForm, ValueCards } from '-src/components/index';
+import {
+  CustomButton,
+  FinancesTable,
+  ModalAddFinance,
+  ValueCards,
+} from '-src/components/index';
 import { useAuth } from '-src/hooks';
 import { financesCollectionRef } from '-src/services/finances.service';
 import { IFinances } from '-src/types';
@@ -11,6 +16,7 @@ import * as s from './styled-home';
 
 const Home = () => {
   const [isLoadingValues, setIsLoadingValues] = useState(false);
+  const [modalAddFinanceIsOpen, setModalAddFinanceIsOpen] = useState(false);
   const [finances, setFinances] = useState<IFinances[]>([]);
 
   const { logout, userUid, isSigned } = useAuth();
@@ -18,6 +24,7 @@ const Home = () => {
   useEffect(() => {
     if (userUid) {
       setIsLoadingValues(true);
+
       const q = query(
         financesCollectionRef,
         where('userUid', '==', userUid),
@@ -62,8 +69,6 @@ const Home = () => {
   return (
     <s.Container>
       <s.Header>
-        <h1>Finanças</h1>
-
         <SignOut
           alt="sair"
           id="logout-button"
@@ -74,6 +79,16 @@ const Home = () => {
       </s.Header>
 
       <s.ElementsContainer>
+        <s.NewTransactionContainer>
+          <h1>Finanças</h1>
+
+          <CustomButton
+            text="Nova transação"
+            onClick={() => setModalAddFinanceIsOpen(true)}
+            sx={{ maxWidth: '14rem' }}
+          />
+        </s.NewTransactionContainer>
+
         <ValueCards
           cashInflows={cashInflows}
           cashOutflows={cashOutflows}
@@ -81,7 +96,10 @@ const Home = () => {
           isLoadingValues={isLoadingValues}
         />
 
-        <InputsForm />
+        <ModalAddFinance
+          isOpen={modalAddFinanceIsOpen}
+          setIsOpen={setModalAddFinanceIsOpen}
+        />
 
         <FinancesTable rows={finances} isLoadingValues={isLoadingValues} />
       </s.ElementsContainer>

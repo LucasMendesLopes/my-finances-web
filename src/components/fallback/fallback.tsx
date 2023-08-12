@@ -1,13 +1,12 @@
-import Loading from '-components/loading/loading';
+import ReactLoading from 'react-loading';
 
+import { colors } from '../../styles/theme';
 import * as s from './styled-fallback';
 
-const Fallback = () => {
+export const Fallback = () => {
   return (
     <s.Container>
-      <Loading type="spin" />
+      <ReactLoading type="spin" color={colors.blue} width={50} height={50} />
     </s.Container>
   );
 };
-
-export default Fallback;

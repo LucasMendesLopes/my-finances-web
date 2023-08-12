@@ -1,3 +1,4 @@
+import { colors } from '-src/styles/theme';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -15,7 +16,7 @@ export const RegisterBg = styled.div`
   background-image: url('/assets/images/register-bg.png');
   background-size: cover;
   background-position: 55% 50%;
-  background-color: #174c4c;
+  background-color: ${colors.blue200};
 `;
 
 export const FormContainer = styled.div`
@@ -61,7 +62,7 @@ export const InputContainer = styled.div<{ type?: string }>`
   gap: 10px;
 
   p.error-message {
-    color: #b52121;
+    color: ${colors.red};
   }
 `;
 
@@ -79,7 +80,7 @@ export const ButtonContainer = styled.div`
   justify-content: center;
   align-items: center;
 
-  span {
-    color: #39393a;
+  span#password-rules {
+    color: ${colors.grey200};
   }
 `;

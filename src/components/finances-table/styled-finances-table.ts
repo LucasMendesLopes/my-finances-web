@@ -1,3 +1,4 @@
+import { colors } from '-src/styles/theme';
 import styled from 'styled-components';
 
 export const TableElementsContainer = styled.div<{ isLoadingValues: boolean }>`
@@ -8,7 +9,7 @@ export const TableElementsContainer = styled.div<{ isLoadingValues: boolean }>`
   justify-content: center;
   ${({ isLoadingValues }) => isLoadingValues && 'padding: 10px'};
   border-radius: 7px;
-  background-color: #ffffff;
+  background-color: ${colors.white};
   box-shadow: 0 6px 15px 1px grey;
 
   .MuiTableContainer-root {
@@ -31,8 +32,8 @@ export const TableElementsContainer = styled.div<{ isLoadingValues: boolean }>`
   }
 `;
 
-export const EmptyTableSpan = styled.span`
-  color: #39393a;
+export const EmptyTableText = styled.p`
+  color: ${colors.grey200};
   font-size: 2rem;
   font-weight: 600;
 `;

@@ -16,7 +16,7 @@ interface IInputPasswordProps {
   error: string | undefined;
 }
 
-const InputPassword = ({
+export const InputPassword = ({
   name,
   label,
   control,
@@ -76,5 +76,3 @@ const InputPassword = ({
     />
   );
 };
-
-export default InputPassword;

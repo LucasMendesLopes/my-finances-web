@@ -1,3 +1,4 @@
+import { colors } from '-src/styles/theme';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -13,15 +14,11 @@ export const Container = styled.div`
 export const Header = styled.div`
   position: absolute;
   width: 100%;
-  height: 25vh;
+  height: 15rem;
   text-align: center;
-  background-color: #297373;
-  color: #ffffff;
+  background-color: ${colors.blue};
+  color: ${colors.white};
   padding-top: 20px;
-
-  h1 {
-    font-size: 2rem;
-  }
 
   #logout-button {
     position: absolute;
@@ -43,6 +40,18 @@ export const ElementsContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   align-items: center;
-  margin-top: 70px;
-  padding-bottom: 40px;
+  margin-top: 6rem;
+  padding-bottom: 6rem;
+
+  h1 {
+    font-size: 2rem;
+  }
+`;
+
+export const NewTransactionContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  color: white;
 `;

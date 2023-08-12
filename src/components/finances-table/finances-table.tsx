@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import ReactLoading from 'react-loading';
 
-import { Loading } from '-components/index';
 import { deleteFinance } from '-src/services';
+import { colors } from '-src/styles/theme';
 import { IFinances } from '-src/types';
 import { formatNumber } from '-src/utils';
 import {
@@ -16,7 +17,7 @@ import { ArrowCircleDown, ArrowCircleUp, Trash } from 'phosphor-react';
 
 import {
   DeleteButton,
-  EmptyTableSpan,
+  EmptyTableText,
   TableElementsContainer,
 } from './styled-finances-table';
 
@@ -25,7 +26,7 @@ interface IFinancesTable {
   isLoadingValues: boolean;
 }
 
-const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
+export const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
   const [deleteOpacity, setDeleteOpacity] = useState(false);
 
   const columns = [
@@ -36,9 +37,10 @@ const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
   ];
 
   const handleRenderIcon = (type: string) => {
-    if (type === 'entrada') return <ArrowCircleUp color="#21b53e" size={25} />;
+    if (type === 'entrada')
+      return <ArrowCircleUp color={colors.green} size={25} />;
     else if (type === 'saida')
-      return <ArrowCircleDown color="#b52121" size={25} />;
+      return <ArrowCircleDown color={colors.red} size={25} />;
   };
 
   const handleRenderValue = (column: string, value: string, id: string) => {
@@ -54,7 +56,7 @@ const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
               deleteFinance(id);
             }}
           >
-            {<Trash color="#39393A" size={25} />}
+            {<Trash color={colors.grey200} size={25} />}
           </DeleteButton>
         </div>
       );
@@ -64,7 +66,14 @@ const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
 
   const handleRenderTable = () => {
     if (isLoadingValues)
-      return <Loading type="bubbles" width={70} height={70} />;
+      return (
+        <ReactLoading
+          type="bubbles"
+          color={colors.blue}
+          width={70}
+          height={70}
+        />
+      );
     else if (rows?.length > 0)
       return (
         <TableContainer sx={{ maxHeight: 500 }}>
@@ -76,7 +85,7 @@ const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
                     key={column.id}
                     style={{ width: column.width, fontWeight: 'bold' }}
                   >
-                    {column.label}
+                    <h3>{column.label}</h3>
                   </TableCell>
                 ))}
               </TableRow>
@@ -114,7 +123,7 @@ const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
       );
     else if (!isLoadingValues)
       return (
-        <EmptyTableSpan>Não há dados para serem mostrados.</EmptyTableSpan>
+        <EmptyTableText>Não há dados para serem mostrados.</EmptyTableText>
       );
   };
 
@@ -124,5 +133,3 @@ const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
     </TableElementsContainer>
   );
 };
-
-export default FinancesTable;

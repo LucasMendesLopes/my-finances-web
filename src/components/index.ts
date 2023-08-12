@@ -1,9 +1,21 @@
-export { default as Button } from './button/button';
-export { default as Card } from './card/card';
-export { default as FinancesTable } from './finances-table/finances-table';
-export { default as InputsForm } from './inputs-form/inputs-form';
-export { default as InputPassword } from './input-password/input-password';
-export { default as InputEmail } from './input-email/input-email';
-export { default as Loading } from './loading/loading';
-export { default as RoutesLayout } from './routes-layout/routes-layout';
-export { default as ValueCards } from './value-cards/value-cards';
+import { Card } from './card/card';
+import { CustomButton } from './custom-button/custom-button';
+import { Fallback } from './fallback/fallback';
+import { FinancesTable } from './finances-table/finances-table';
+import { InputEmail } from './input-email/input-email';
+import { InputPassword } from './input-password/input-password';
+import { ModalAddFinance } from './modal-add-finance/modal-add-finance';
+import { RoutesLayout } from './routes-layout/routes-layout';
+import { ValueCards } from './value-cards/value-cards';
+
+export {
+  Card,
+  CustomButton,
+  Fallback,
+  FinancesTable,
+  ModalAddFinance,
+  InputPassword,
+  InputEmail,
+  RoutesLayout,
+  ValueCards,
+};

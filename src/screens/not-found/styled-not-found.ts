@@ -1,3 +1,4 @@
+import { colors } from '-src/styles/theme';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -15,7 +16,7 @@ export const Container = styled.div`
     text-align: center;
     width: 100%;
     font-weight: bold;
-    color: #39393a;
+    color: ${colors.grey200};
   }
 
   p#warning {

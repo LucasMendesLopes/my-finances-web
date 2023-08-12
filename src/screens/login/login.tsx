@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { Button, InputEmail, InputPassword, Loading } from '-src/components';
+import { CustomButton, InputEmail, InputPassword } from '-src/components';
 import { login } from '-src/services';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -78,13 +78,11 @@ const Login = () => {
           </s.InputsContainer>
 
           <s.ButtonContainer>
-            <Button width="100%">
-              {isLoadingLogin ? (
-                <Loading type="spin" color="#ffffff" width={30} height={30} />
-              ) : (
-                'Login'
-              )}
-            </Button>
+            <CustomButton
+              isLoading={isLoadingLogin}
+              text="Login"
+              type="submit"
+            />
 
             <s.RegisterRedirect>
               <span>Novo no My Finances?</span>

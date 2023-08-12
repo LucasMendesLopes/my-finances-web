@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { Button, InputEmail, InputPassword, Loading } from '-src/components';
+import { CustomButton, InputEmail, InputPassword } from '-src/components';
 import { signUp } from '-src/services';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -104,19 +104,17 @@ const Register = () => {
           </s.InputsContainer>
 
           <s.ButtonContainer>
-            <span>
+            <span id="password-rules">
               A senha deve ter no mínimo 6 dígitos, ao menos 1 letra maiúscula,
               1 letra minúscula, 1 caractere númerico ou especial (a-z, A-Z,
               0-9, @-_ç&*#$%).
             </span>
 
-            <Button width="100%">
-              {isLoadingRegister ? (
-                <Loading type="spin" color="#ffffff" width={30} height={30} />
-              ) : (
-                'Cadastrar'
-              )}
-            </Button>
+            <CustomButton
+              isLoading={isLoadingRegister}
+              text="Cadastrar"
+              type="submit"
+            />
           </s.ButtonContainer>
         </s.Form>
       </s.FormContainer>

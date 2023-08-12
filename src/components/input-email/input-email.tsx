@@ -15,7 +15,7 @@ interface IInputEmailProps {
   error: string | undefined;
 }
 
-const InputEmail = ({
+export const InputEmail = ({
   name,
   label,
   control,
@@ -51,5 +51,3 @@ const InputEmail = ({
     />
   );
 };
-
-export default InputEmail;

@@ -1,6 +1,7 @@
 import { ReactElement } from 'react';
+import ReactLoading from 'react-loading';
 
-import { Loading } from '-components/index';
+import { colors } from '-src/styles/theme';
 import { formatNumber } from '-src/utils';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -13,11 +14,11 @@ interface ICard {
   value: number;
 }
 
-const Card = ({ title, icon, isLoadingValues, value }: ICard) => {
+export const Card = ({ title, icon, isLoadingValues, value }: ICard) => {
   return (
     <Container>
       <TitleContainer>
-        <span id="title">{title}</span>
+        <h2 id="title">{title}</h2>
 
         <div id="icon">{icon}</div>
       </TitleContainer>
@@ -25,7 +26,12 @@ const Card = ({ title, icon, isLoadingValues, value }: ICard) => {
       <Tooltip placement="top" arrow title={formatNumber(value)}>
         <CardValue value={value}>
           {isLoadingValues ? (
-            <Loading type="spin" />
+            <ReactLoading
+              type="spin"
+              color={colors.blue}
+              width={50}
+              height={50}
+            />
           ) : (
             `R$ ${formatNumber(value)}`
           )}
@@ -34,5 +40,3 @@ const Card = ({ title, icon, isLoadingValues, value }: ICard) => {
     </Container>
   );
 };
-
-export default Card;

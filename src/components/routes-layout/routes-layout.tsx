@@ -6,8 +6,6 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const RoutesLayout = ({ children }: LayoutProps) => {
+export const RoutesLayout = ({ children }: LayoutProps) => {
   return <s.Container>{children}</s.Container>;
 };
-
-export default RoutesLayout;
