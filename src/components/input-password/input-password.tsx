@@ -1,27 +1,22 @@
 import { ChangeEvent } from 'react';
 import { Control, Controller, useForm } from 'react-hook-form';
 
-import { ILoginFormInputs } from '-src/screens/login/login';
-import { IRegisterFormInputs } from '-src/screens/register/register';
-import { InputAdornment, TextField } from '@mui/material';
+import { ILoginFormInputs } from '-src/pages/login/login';
+import { IRegisterFormInputs } from '-src/pages/register/register';
+import { InputAdornment, TextField, TextFieldProps } from '@mui/material';
 import { EyeClosed, EyeSlash } from 'phosphor-react';
 
-import * as s from './styled-input-password';
-
-interface IInputPasswordProps {
-  name: 'email' | 'password' | 'confirmEmail' | 'confirmPassword';
-  label: string;
+type IInputPasswordProps = {
+  name: 'password' | 'confirmPassword';
   control: Control<ILoginFormInputs | IRegisterFormInputs | any>;
-  rules?: object;
-  error: string | undefined;
-}
+  errorMessage?: string;
+} & TextFieldProps;
 
 export const InputPassword = ({
   name,
-  label,
   control,
-  rules,
-  error,
+  errorMessage,
+  ...props
 }: IInputPasswordProps) => {
   const { watch, setValue } = useForm();
 
@@ -39,39 +34,43 @@ export const InputPassword = ({
     <Controller
       name={name}
       control={control}
-      rules={rules}
       render={({ field: { value, onChange } }) => (
-        <s.InputContainer>
-          <TextField
-            fullWidth
-            type={viewPassword ? 'text' : 'password'}
-            label={label}
-            variant="outlined"
-            onChange={(e) => handleChange(e, onChange)}
-            value={value || ''}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  {' '}
-                  {viewPassword ? (
-                    <EyeSlash
-                      style={{ cursor: 'pointer' }}
-                      size={20}
-                      onClick={() => setValue('viewPassword', !viewPassword)}
-                    />
-                  ) : (
-                    <EyeClosed
-                      style={{ cursor: 'pointer' }}
-                      size={20}
-                      onClick={() => setValue('viewPassword', !viewPassword)}
-                    />
-                  )}
-                </InputAdornment>
-              ),
-            }}
-          />
-          {error && <p className="error-message">{error}</p>}
-        </s.InputContainer>
+        <TextField
+          fullWidth
+          type={viewPassword ? 'text' : 'password'}
+          variant="outlined"
+          onChange={(e) => handleChange(e, onChange)}
+          value={value || ''}
+          sx={{
+            '.MuiFormHelperText-root': {
+              position: 'absolute',
+              margin: '3.7rem 0 0',
+            },
+          }}
+          error={!!errorMessage && true}
+          helperText={errorMessage}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                {' '}
+                {viewPassword ? (
+                  <EyeSlash
+                    style={{ cursor: 'pointer' }}
+                    size={20}
+                    onClick={() => setValue('viewPassword', !viewPassword)}
+                  />
+                ) : (
+                  <EyeClosed
+                    style={{ cursor: 'pointer' }}
+                    size={20}
+                    onClick={() => setValue('viewPassword', !viewPassword)}
+                  />
+                )}
+              </InputAdornment>
+            ),
+          }}
+          {...props}
+        />
       )}
     />
   );

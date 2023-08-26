@@ -31,21 +31,13 @@ export const FormContainer = styled.div`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  max-width: 100%;
-  width: 60vh;
+  max-width: 90%;
+  width: 40rem;
   align-items: center;
-  gap: 30px;
+  gap: 3rem;
 
   img#logo {
     width: 45%;
-  }
-
-  @media (max-width: 1366px) {
-    width: 70vh;
-
-    button {
-      font-size: 1rem;
-    }
   }
 `;
 
@@ -53,23 +45,7 @@ export const InputsContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-`;
-
-export const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  p.error-message {
-    color: ${colors.red};
-  }
-`;
-
-export const Input = styled.input`
-  padding: 10px;
-  border: 1px solid;
-  border-radius: 7px;
+  gap: 2.5rem;
 `;
 
 export const ButtonContainer = styled.div`

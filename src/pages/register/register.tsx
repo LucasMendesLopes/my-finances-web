@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { CustomButton, InputEmail, InputPassword } from '-src/components';
+import { CustomButton, Input, InputPassword } from '-src/components';
 import { signUp } from '-src/services';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -27,18 +27,18 @@ const SignUpSchema = yup
       ),
     confirmEmail: yup
       .string()
-      .oneOf([yup.ref('email')], 'Os emails não coincidem!')
+      .oneOf([yup.ref('email')], 'Os emails não coincidem.')
       .required('Confirme seu email.'),
     password: yup
       .string()
       .required('Digite sua senha.')
       .matches(
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/,
-        'Senha inválida!'
+        'Senha inválida.'
       ),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref('password')], 'As senhas não coincidem!')
+      .oneOf([yup.ref('password')], 'As senhas não coincidem.')
       .required('Confirme sua senha.'),
   })
   .required();
@@ -71,42 +71,40 @@ const Register = () => {
     <s.Container>
       <s.FormContainer>
         <s.Form onSubmit={handleSubmit(onSubmit)}>
-          <img src="/assets/logos/logo.png" alt="logotipo" id="logo" />
-
           <s.InputsContainer>
-            <InputEmail
+            <Input
               name="email"
               label="Digite seu e-mail"
               control={control}
-              error={errors.email?.message}
+              errorMessage={errors.email?.message}
             />
 
-            <InputEmail
+            <Input
               name="confirmEmail"
               label="Confirme seu e-mail"
               control={control}
-              error={errors.confirmEmail?.message}
+              errorMessage={errors.confirmEmail?.message}
             />
 
             <InputPassword
               name="password"
               label="Digite sua senha"
               control={control}
-              error={errors?.password?.message}
+              errorMessage={errors?.password?.message}
             />
 
             <InputPassword
               name="confirmPassword"
               label="Confirme sua senha"
               control={control}
-              error={errors?.confirmPassword?.message}
+              errorMessage={errors?.confirmPassword?.message}
             />
           </s.InputsContainer>
 
           <s.ButtonContainer>
             <span id="password-rules">
               A senha deve ter no mínimo 6 dígitos, ao menos 1 letra maiúscula,
-              1 letra minúscula, 1 caractere númerico ou especial (a-z, A-Z,
+              1 letra minúscula, 1 caractere numérico ou especial (a-z, A-Z,
               0-9, @-_ç&*#$%).
             </span>
 

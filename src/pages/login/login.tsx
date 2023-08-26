@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { CustomButton, InputEmail, InputPassword } from '-src/components';
+import { CustomButton, Input, InputPassword } from '-src/components';
 import { login } from '-src/services';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -60,20 +60,18 @@ const Login = () => {
           <img src="/assets/logos/logo.png" alt="logotipo" id="logo" />
 
           <s.InputsContainer>
-            <InputEmail
+            <Input
               name="email"
               label="E-mail"
               control={control}
-              rules={{}}
-              error={errors.email?.message}
+              errorMessage={errors.email?.message}
             />
 
             <InputPassword
               name="password"
               label="Senha"
               control={control}
-              rules={{}}
-              error={errors?.password?.message}
+              errorMessage={errors.password?.message}
             />
           </s.InputsContainer>
 

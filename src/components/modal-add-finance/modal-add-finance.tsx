@@ -1,49 +1,65 @@
 import { Dispatch, SetStateAction, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import { CustomButton } from '-components/index';
+import { CustomButton, DateInput, Input } from '-components/index';
 import { useAuth } from '-src/hooks';
 import { financesCollectionRef } from '-src/services/finances.service';
-import { Checkbox, FormControlLabel, TextField } from '@mui/material';
-import {
-  LocalizationProvider,
-  DatePicker as XDatePicker,
-} from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { format } from 'date-fns';
-import ptBR from 'date-fns/locale/pt-BR';
+import { yupGeneralSchema } from '-src/utils/yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Checkbox, FormControlLabel } from '@mui/material';
 import { Timestamp, addDoc } from 'firebase/firestore';
+import * as yup from 'yup';
 
 import { BaseModal } from '../base-modal/base-modal';
 import * as s from './styles';
+
+interface IFinance {
+  date: Date;
+  description: string;
+  value: number;
+}
 
 interface IModalAddFinace {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
+const addFinanceSchema = yup
+  .object({
+    date: yupGeneralSchema.date,
+    description: yupGeneralSchema.description,
+    value: yupGeneralSchema.value,
+  })
+  .required();
+
 export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
-  const [description, setDescription] = useState('');
-  const [value, setValue] = useState<number | ''>('');
   const [isEntrada, setIsEntrada] = useState(true);
   const [isSaida, setIsSaida] = useState(false);
-  const [dateValue, setDateValue] = useState(format(new Date(), 'MM/dd/yyyy'));
   const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+  } = useForm<IFinance>({
+    resolver: yupResolver(addFinanceSchema),
+  });
 
   const { userUid } = useAuth();
 
   const clearInputs = () => {
-    setDescription('');
-    setValue('');
+    reset({});
   };
 
-  const handleAddFinance = async () => {
+  const onSubmit = async (dataFields: IFinance) => {
     setIsLoading(true);
 
     await addDoc(financesCollectionRef, {
-      date: Timestamp.fromDate(new Date(dateValue)),
-      description,
+      date: Timestamp.fromDate(new Date(dataFields.date)),
+      description: dataFields.description,
       type: isEntrada ? 'entrada' : 'saida',
-      value,
+      value: dataFields.value,
       userUid,
     });
 
@@ -62,11 +78,6 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
     }
   };
 
-  const handleChangeDate = (e: Date) => {
-    const newDate = format(new Date(e), 'MM/dd/yyyy');
-    setDateValue(newDate);
-  };
-
   const handleClose = () => {
     setIsOpen(false);
     clearInputs();
@@ -80,39 +91,29 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
       isOpen={isOpen}
       onClose={() => !isLoading && handleClose()}
     >
-      <s.ElementsContainer>
+      <s.Form onSubmit={handleSubmit(onSubmit)}>
         <s.InputsContainer>
-          <LocalizationProvider
-            dateAdapter={AdapterDateFns}
-            adapterLocale={ptBR}
-          >
-            <XDatePicker
-              slotProps={{
-                popper: { placement: 'auto' },
-              }}
-              onChange={(e: any) => handleChangeDate(e)}
-              defaultValue={new Date(dateValue)}
-              value={new Date(dateValue)}
-            />
-          </LocalizationProvider>
-
-          <TextField
-            type="text"
-            label="Descrição"
-            variant="outlined"
-            value={description || ''}
-            onChange={(e: any) => setDescription(e.target.value)}
-            fullWidth
+          <DateInput
+            name="date"
+            label="Escolha a data"
+            control={control}
+            errorMessage={errors.date?.message}
+            fullwidth
           />
 
-          <TextField
-            type="number"
+          <Input
+            name="description"
+            label="Descrição"
+            control={control}
+            errorMessage={errors.description?.message}
+          />
+
+          <Input
+            name="value"
             label="Valor"
-            variant="outlined"
-            value={value || ''}
-            inputProps={{ min: 1 }}
-            onChange={(e: any) => setValue(Number(e.target.value))}
-            fullWidth
+            type="number"
+            errorMessage={errors.value?.message}
+            control={control}
           />
 
           <div>
@@ -136,16 +137,12 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
             text="Cancelar"
             variant="outlined"
             disabled={isLoading}
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
           />
 
-          <CustomButton
-            text="Cadastrar"
-            onClick={handleAddFinance}
-            isLoading={isLoading}
-          />
+          <CustomButton text="Cadastrar" isLoading={isLoading} type="submit" />
         </s.ButtonsContainer>
-      </s.ElementsContainer>
+      </s.Form>
     </BaseModal>
   );
 };

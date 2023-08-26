@@ -9,19 +9,19 @@ import PrivateRoutes from './private-routes';
 import PublicRoutes from './public-routes';
 
 const Home = lazy(() =>
-  import('-src/screens').then((module) => ({ default: module.Home }))
+  import('-src/pages').then((module) => ({ default: module.Home }))
 );
 
 const Login = lazy(() =>
-  import('-src/screens').then((module) => ({ default: module.Login }))
+  import('-src/pages').then((module) => ({ default: module.Login }))
 );
 
 const Register = lazy(() =>
-  import('-src/screens').then((module) => ({ default: module.Register }))
+  import('-src/pages').then((module) => ({ default: module.Register }))
 );
 
 const NotFound = lazy(() =>
-  import('-src/screens').then((module) => ({ default: module.NotFound }))
+  import('-src/pages').then((module) => ({ default: module.NotFound }))
 );
 
 const Routes = () => {
