@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import { CustomButton, DateInput, Input } from '-components/index';
 import { useAuth } from '-src/hooks';
-import { financesCollectionRef } from '-src/services/finances.service';
+import { addFinance } from '-src/services/finance.service';
 import { yupGeneralSchema } from '-src/utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Checkbox, FormControlLabel } from '@mui/material';
-import { Timestamp, addDoc } from 'firebase/firestore';
 import * as yup from 'yup';
 
 import { BaseModal } from '../base-modal/base-modal';
@@ -37,6 +37,8 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
   const [isSaida, setIsSaida] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { userId } = useAuth();
+
   const {
     handleSubmit,
     control,
@@ -46,8 +48,6 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
     resolver: yupResolver(addFinanceSchema),
   });
 
-  const { userUid } = useAuth();
-
   const clearInputs = () => {
     reset({});
   };
@@ -55,17 +55,30 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
   const onSubmit = async (dataFields: IFinance) => {
     setIsLoading(true);
 
-    await addDoc(financesCollectionRef, {
-      date: Timestamp.fromDate(new Date(dataFields.date)),
-      description: dataFields.description,
-      type: isEntrada ? 'entrada' : 'saida',
-      value: dataFields.value,
-      userUid,
-    });
+    const { date, description, value } = dataFields;
 
-    setIsLoading(false);
-    setIsOpen(false);
-    clearInputs();
+    const financeType = isEntrada ? 'entrada' : 'saida';
+
+    const body = {
+      date,
+      description,
+      type: financeType,
+      value,
+      userId,
+    };
+
+    addFinance(body)
+      .then((resp) => {
+        toast.success(resp);
+      })
+      .catch((error) => {
+        toast.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setIsOpen(false);
+        clearInputs();
+      });
   };
 
   const handleCheckbox = () => {

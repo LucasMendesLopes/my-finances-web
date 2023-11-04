@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import {
   CustomButton,
@@ -7,9 +8,7 @@ import {
   ValueCards,
 } from '-src/components/index';
 import { useAuth } from '-src/hooks';
-import { financesCollectionRef } from '-src/services/finances.service';
-import { IFinances } from '-src/types';
-import { onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { IFinance, getFinances } from '-src/services';
 import { SignOut } from 'phosphor-react';
 
 import * as s from './styled-home';
@@ -17,54 +16,26 @@ import * as s from './styled-home';
 const Home = () => {
   const [isLoadingValues, setIsLoadingValues] = useState(false);
   const [modalAddFinanceIsOpen, setModalAddFinanceIsOpen] = useState(false);
-  const [finances, setFinances] = useState<IFinances[]>([]);
+  const [finances, setFinances] = useState<IFinance[]>([]);
+  const [inflows, setInflows] = useState<number>(0);
+  const [outflows, setOutflows] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
 
-  const { logout, userUid, isSigned } = useAuth();
+  const { signOut, userId } = useAuth();
 
   useEffect(() => {
-    if (userUid) {
-      setIsLoadingValues(true);
+    setIsLoadingValues(true);
 
-      const q = query(
-        financesCollectionRef,
-        where('userUid', '==', userUid),
-        orderBy('date', 'desc')
-      );
-
-      const subscribe = onSnapshot(q, (resp) => {
-        const array: IFinances[] = [];
-
-        resp.docs.forEach((doc) => {
-          const dateFormated = new Date(
-            doc.data().date.seconds * 1000
-          ).toLocaleDateString();
-
-          array.push({
-            id: doc.id,
-            date: dateFormated,
-            description: doc.data().description,
-            type: doc.data().type,
-            value: doc.data().value,
-          });
-        });
-
-        setFinances(array);
-        setIsLoadingValues(false);
-      });
-
-      return () => subscribe();
-    }
-  }, [isSigned]);
-
-  const cashInflows = finances
-    ?.filter((item: IFinances) => item.type === 'entrada')
-    .reduce((n: number, { value }: any) => n + value, 0);
-
-  const cashOutflows = finances
-    ?.filter((item: IFinances) => item.type === 'saida')
-    .reduce((n: number, { value }: any) => n + value, 0);
-
-  const total = cashInflows - cashOutflows;
+    getFinances(userId)
+      .then((resp) => {
+        setFinances(resp.finances);
+        setInflows(resp.inflows);
+        setOutflows(resp.outflows);
+        setTotal(resp.total);
+      })
+      .catch((err) => toast.error(err))
+      .finally(() => setIsLoadingValues(false));
+  }, []);
 
   return (
     <s.Container>
@@ -72,7 +43,7 @@ const Home = () => {
         <SignOut
           alt="sair"
           id="logout-button"
-          onClick={logout}
+          onClick={signOut}
           size={25}
           weight="regular"
         />
@@ -90,8 +61,8 @@ const Home = () => {
         </s.NewTransactionContainer>
 
         <ValueCards
-          cashInflows={cashInflows}
-          cashOutflows={cashOutflows}
+          inflows={inflows}
+          outflows={outflows}
           total={total}
           isLoadingValues={isLoadingValues}
         />

@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 
 import { CustomButton, Input, InputPassword } from '-src/components';
-import { login } from '-src/services';
+import { useAuth } from '-src/contexts/auth-context';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
@@ -14,7 +13,7 @@ export interface ILoginFormInputs {
   password: string;
 }
 
-const SignSchema = yup
+const SignInSchema = yup
   .object({
     email: yup
       .string()
@@ -29,26 +28,20 @@ const SignSchema = yup
 
 const Login = () => {
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
+  const { signIn } = useAuth();
 
   const {
     handleSubmit,
     formState: { errors },
     control,
   } = useForm<ILoginFormInputs>({
-    resolver: yupResolver(SignSchema),
+    resolver: yupResolver(SignInSchema),
   });
 
   const onSubmit = async (data: ILoginFormInputs) => {
     setIsLoadingLogin(true);
 
-    await login(data.email, data.password)
-      .then((resp) => {
-        toast.success(resp);
-      })
-      .catch((error) => {
-        toast.error(error);
-      })
-      .finally(() => setIsLoadingLogin(false));
+    signIn(data.email, data.password);
   };
 
   return (

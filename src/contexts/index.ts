@@ -1,1 +1,3 @@
-export { default as AuthProvider } from "./auth-context";
+import { AuthProvider } from './auth-provider';
+
+export { AuthProvider };

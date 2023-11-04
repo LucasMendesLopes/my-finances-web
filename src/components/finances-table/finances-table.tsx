@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import ReactLoading from 'react-loading';
 
-import { deleteFinance } from '-src/services';
 import { colors } from '-src/styles/theme';
-import { IFinances } from '-src/types';
+import { IFinance } from '-src/types';
 import { formatNumber } from '-src/utils';
 import {
   Table,
@@ -22,7 +21,7 @@ import {
 } from './styled-finances-table';
 
 interface IFinancesTable {
-  rows: IFinances[];
+  rows: IFinance[] | [];
   isLoadingValues: boolean;
 }
 
@@ -52,9 +51,7 @@ export const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
           <DeleteButton
             key={id}
             deleteOpacity={deleteOpacity}
-            onClick={() => {
-              deleteFinance(id);
-            }}
+            onClick={() => null}
           >
             {<Trash color={colors.grey200} size={25} />}
           </DeleteButton>
@@ -104,13 +101,13 @@ export const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
                     hover
                     role="checkbox"
                     tabIndex={-1}
-                    key={row.id}
+                    key={row._id}
                   >
                     {columns.map((column) => {
                       const value = (row as { [k in string]: any })[column.id];
                       return (
                         <TableCell key={column.id}>
-                          {handleRenderValue(column.id, value, row.id)}
+                          {handleRenderValue(column.id, value, row._id)}
                         </TableCell>
                       );
                     })}

@@ -9,15 +9,15 @@ import { CardsContainer } from './styled-value-cards';
 import { colors } from '-src/styles/theme';
 
 interface IValueCards {
-  cashInflows: number;
-  cashOutflows: number;
+  inflows: number;
+  outflows: number;
   total: number;
   isLoadingValues: boolean;
 }
 
 export const ValueCards = ({
-  cashInflows,
-  cashOutflows,
+  inflows,
+  outflows,
   total,
   isLoadingValues,
 }: IValueCards) => {
@@ -27,14 +27,14 @@ export const ValueCards = ({
       icon: (
         <ArrowCircleUp color={colors.green} size={'100%'} id="icon-entrada" />
       ),
-      value: cashInflows,
+      value: inflows,
     },
     {
       title: 'Saídas',
       icon: (
         <ArrowCircleDown color={colors.red} size={'100%'} id="icon-saida" />
       ),
-      value: cashOutflows,
+      value: outflows,
     },
     {
       title: 'Total',

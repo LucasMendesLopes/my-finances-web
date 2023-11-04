@@ -5,9 +5,9 @@ import { ROUTE_PATHS } from '-src/constants';
 import { useAuth } from '-src/hooks';
 
 const PublicRoutes = () => {
-  const { isSigned } = useAuth();
+  const { authenticated } = useAuth();
 
-  return isSigned ? (
+  return authenticated ? (
     <Navigate to={ROUTE_PATHS.home} />
   ) : (
     <RoutesLayout>

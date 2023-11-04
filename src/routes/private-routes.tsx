@@ -5,9 +5,9 @@ import { ROUTE_PATHS } from '-src/constants';
 import { useAuth } from '-src/hooks';
 
 const PrivateRoutes = () => {
-  const { isSigned } = useAuth();
+  const { authenticated } = useAuth();
 
-  return isSigned ? (
+  return authenticated ? (
     <RoutesLayout>
       <Outlet />
     </RoutesLayout>

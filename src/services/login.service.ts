@@ -1,62 +1,46 @@
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-} from 'firebase/auth';
+import { api } from '-src/api/api';
 
-import { auth } from './firebase-config';
+export interface ILoginResp {
+  message: string;
+  accessToken: string;
+  refreshToken: string;
+}
 
-const login = (email: string, password: string): Promise<string> => {
+const login = (email: string, password: string): Promise<ILoginResp> => {
   return new Promise((resolve, reject) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        return resolve('Seja bem vindo(a)!');
+    api
+      .post('/auth/signIn', { email, password })
+      .then((resp) => {
+        return resolve(resp.data);
       })
       .catch((error) => {
-        let message;
-
-        switch (error.code) {
-          case 'auth/invalid-email':
-            message = 'Email inválido!';
-            break;
-
-          case 'auth/user-not-found':
-            message = 'Email não cadastrado!';
-            break;
-
-          case 'auth/wrong-password':
-            message = 'Senha incorreta!';
-            break;
-
-          default:
-            message = 'Erro ao realizar o login.';
-            break;
-        }
-        reject(message);
+        reject(error);
       });
   });
 };
 
-const signUp = (email: string, password: string): Promise<string> => {
+const register = (email: string, password: string): Promise<string> => {
   return new Promise((resolve, reject) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        resolve('Cadastro efetuado com sucesso!');
+    api
+      .post('/auth/signUp', { email, password })
+      .then((resp) => {
+        return resolve(resp.data.message);
+      })
+      .catch((error) => reject(error.response.data.message));
+  });
+};
+
+const refreshToken = (token: string): Promise<ILoginResp> => {
+  return new Promise((resolve, reject) => {
+    api
+      .post('/refresh-token', { token })
+      .then((resp) => {
+        return resolve(resp.data);
       })
       .catch((error) => {
-        let message;
-
-        switch (error.code) {
-          case 'auth/email-already-in-use':
-            message = 'Este email já está cadastrado!';
-            break;
-
-          default:
-            message = 'Erro ao realizar o cadastro.';
-            break;
-        }
-        reject(message);
+        reject(error);
       });
   });
 };
 
-export { login, signUp };
+export { login, register, refreshToken };

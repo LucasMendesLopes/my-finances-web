@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { CustomButton, Input, InputPassword } from '-src/components';
-import { signUp } from '-src/services';
+import { useAuth } from '-src/hooks';
+import { register } from '-src/services';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
@@ -54,16 +55,16 @@ const Register = () => {
     resolver: yupResolver(SignUpSchema),
   });
 
+  const { signIn } = useAuth();
+
   const onSubmit = async (data: IRegisterFormInputs) => {
     setIsLoadingRegister(true);
 
-    await signUp(data.email, data.password)
-      .then((resp) => {
-        toast.success(resp);
+    await register(data.email, data.password)
+      .then(() => {
+        signIn(data.email, data.password);
       })
-      .catch((error) => {
-        toast.error(error);
-      })
+      .catch((error) => toast.error(error))
       .finally(() => setIsLoadingRegister(false));
   };
 

@@ -25,9 +25,9 @@ const NotFound = lazy(() =>
 );
 
 const Routes = () => {
-  const { isLoading } = useAuth();
+  const { isLoadingSign } = useAuth();
 
-  if (isLoading) return <Fallback />;
+  if (isLoadingSign) return <Fallback />;
 
   return (
     <Suspense fallback={<Fallback />}>
