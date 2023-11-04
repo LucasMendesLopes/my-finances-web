@@ -8,7 +8,8 @@ import {
   ValueCards,
 } from '-src/components/index';
 import { useAuth } from '-src/hooks';
-import { IFinance, getFinances } from '-src/services';
+import { getFinances } from '-src/services';
+import { IFinance } from '-src/types';
 import { SignOut } from 'phosphor-react';
 
 import * as s from './styled-home';
