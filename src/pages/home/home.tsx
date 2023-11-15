@@ -71,6 +71,11 @@ const Home = () => {
         <ModalAddFinance
           isOpen={modalAddFinanceIsOpen}
           setIsOpen={setModalAddFinanceIsOpen}
+          setIsLoadingValues={setIsLoadingValues}
+          setFinances={setFinances}
+          setInflows={setInflows}
+          setOutflows={setOutflows}
+          setTotal={setTotal}
         />
 
         <FinancesTable rows={finances} isLoadingValues={isLoadingValues} />

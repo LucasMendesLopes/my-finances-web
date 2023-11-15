@@ -4,7 +4,8 @@ import toast from 'react-hot-toast';
 
 import { CustomButton, DateInput, Input } from '-components/index';
 import { useAuth } from '-src/hooks';
-import { addFinance } from '-src/services/finance.service';
+import { addFinance, getFinances } from '-src/services/finance.service';
+import { IFinance } from '-src/types';
 import { yupGeneralSchema } from '-src/utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Checkbox, FormControlLabel } from '@mui/material';
@@ -13,7 +14,7 @@ import * as yup from 'yup';
 import { BaseModal } from '../base-modal/base-modal';
 import * as s from './styles';
 
-interface IFinance {
+interface IFinanceFormValues {
   date: Date;
   description: string;
   value: number;
@@ -22,6 +23,11 @@ interface IFinance {
 interface IModalAddFinace {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setIsLoadingValues: Dispatch<SetStateAction<boolean>>;
+  setFinances: Dispatch<SetStateAction<IFinance[]>>;
+  setInflows: Dispatch<SetStateAction<number>>;
+  setOutflows: Dispatch<SetStateAction<number>>;
+  setTotal: Dispatch<SetStateAction<number>>;
 }
 
 const addFinanceSchema = yup
@@ -32,10 +38,18 @@ const addFinanceSchema = yup
   })
   .required();
 
-export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
+export const ModalAddFinance = ({
+  isOpen,
+  setIsOpen,
+  setIsLoadingValues,
+  setFinances,
+  setInflows,
+  setOutflows,
+  setTotal,
+}: IModalAddFinace) => {
   const [isEntrada, setIsEntrada] = useState(true);
   const [isSaida, setIsSaida] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingAddFinance, setIsLoadingAddFinance] = useState(false);
 
   const { userId } = useAuth();
 
@@ -44,7 +58,7 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
     control,
     formState: { errors },
     reset,
-  } = useForm<IFinance>({
+  } = useForm<IFinanceFormValues>({
     resolver: yupResolver(addFinanceSchema),
   });
 
@@ -52,8 +66,8 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
     reset({});
   };
 
-  const onSubmit = async (dataFields: IFinance) => {
-    setIsLoading(true);
+  const onSubmit = async (dataFields: IFinanceFormValues) => {
+    setIsLoadingAddFinance(true);
 
     const { date, description, value } = dataFields;
 
@@ -67,7 +81,7 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
       userId,
     };
 
-    addFinance(body)
+    await addFinance(body)
       .then((resp) => {
         toast.success(resp);
       })
@@ -75,10 +89,22 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
         toast.error(error);
       })
       .finally(() => {
-        setIsLoading(false);
+        setIsLoadingAddFinance(false);
         setIsOpen(false);
         clearInputs();
       });
+
+    setIsLoadingValues(true);
+
+    getFinances(userId)
+      .then((resp) => {
+        setFinances(resp.finances);
+        setInflows(resp.inflows);
+        setOutflows(resp.outflows);
+        setTotal(resp.total);
+      })
+      .catch((err) => toast.error(err))
+      .finally(() => setIsLoadingValues(false));
   };
 
   const handleCheckbox = () => {
@@ -102,7 +128,7 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
       maxWidth="90%"
       title="Cadastrar transação"
       isOpen={isOpen}
-      onClose={() => !isLoading && handleClose()}
+      onClose={() => !isLoadingAddFinance && handleClose()}
     >
       <s.Form onSubmit={handleSubmit(onSubmit)}>
         <s.InputsContainer>
@@ -149,11 +175,15 @@ export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
           <CustomButton
             text="Cancelar"
             variant="outlined"
-            disabled={isLoading}
+            disabled={isLoadingAddFinance}
             onClick={handleClose}
           />
 
-          <CustomButton text="Cadastrar" isLoading={isLoading} type="submit" />
+          <CustomButton
+            text="Cadastrar"
+            isLoading={isLoadingAddFinance}
+            type="submit"
+          />
         </s.ButtonsContainer>
       </s.Form>
     </BaseModal>
