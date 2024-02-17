@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 
 import {
   CustomButton,
@@ -7,35 +6,27 @@ import {
   ModalAddFinance,
   ValueCards,
 } from '-src/components/index';
-import { useAuth } from '-src/hooks';
-import { getFinances } from '-src/services';
-import { IFinance } from '-src/types';
+import { useAuth, useFinances } from '-src/hooks';
 import { SignOut } from 'phosphor-react';
 
 import * as s from './styled-home';
 
 const Home = () => {
-  const [isLoadingValues, setIsLoadingValues] = useState(false);
   const [modalAddFinanceIsOpen, setModalAddFinanceIsOpen] = useState(false);
-  const [finances, setFinances] = useState<IFinance[]>([]);
-  const [inflows, setInflows] = useState<number>(0);
-  const [outflows, setOutflows] = useState<number>(0);
-  const [total, setTotal] = useState<number>(0);
 
-  const { signOut, userId } = useAuth();
+  const { signOut } = useAuth();
+
+  const {
+    handleGetFinances,
+    finances,
+    inflows,
+    isLoadingValues,
+    outflows,
+    total,
+  } = useFinances();
 
   useEffect(() => {
-    setIsLoadingValues(true);
-
-    getFinances(userId)
-      .then((resp) => {
-        setFinances(resp.finances);
-        setInflows(resp.inflows);
-        setOutflows(resp.outflows);
-        setTotal(resp.total);
-      })
-      .catch((err) => toast.error(err))
-      .finally(() => setIsLoadingValues(false));
+    handleGetFinances();
   }, []);
 
   return (
@@ -71,11 +62,6 @@ const Home = () => {
         <ModalAddFinance
           isOpen={modalAddFinanceIsOpen}
           setIsOpen={setModalAddFinanceIsOpen}
-          setIsLoadingValues={setIsLoadingValues}
-          setFinances={setFinances}
-          setInflows={setInflows}
-          setOutflows={setOutflows}
-          setTotal={setTotal}
         />
 
         <FinancesTable rows={finances} isLoadingValues={isLoadingValues} />

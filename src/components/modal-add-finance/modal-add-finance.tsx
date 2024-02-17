@@ -3,9 +3,8 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { CustomButton, DateInput, Input } from '-components/index';
-import { useAuth } from '-src/hooks';
-import { addFinance, getFinances } from '-src/services/finance.service';
-import { IFinance } from '-src/types';
+import { useAuth, useFinances } from '-src/hooks';
+import { addFinance } from '-src/services/finance.service';
 import { yupGeneralSchema } from '-src/utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Checkbox, FormControlLabel } from '@mui/material';
@@ -23,11 +22,6 @@ interface IFinanceFormValues {
 interface IModalAddFinace {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  setIsLoadingValues: Dispatch<SetStateAction<boolean>>;
-  setFinances: Dispatch<SetStateAction<IFinance[]>>;
-  setInflows: Dispatch<SetStateAction<number>>;
-  setOutflows: Dispatch<SetStateAction<number>>;
-  setTotal: Dispatch<SetStateAction<number>>;
 }
 
 const addFinanceSchema = yup
@@ -38,20 +32,13 @@ const addFinanceSchema = yup
   })
   .required();
 
-export const ModalAddFinance = ({
-  isOpen,
-  setIsOpen,
-  setIsLoadingValues,
-  setFinances,
-  setInflows,
-  setOutflows,
-  setTotal,
-}: IModalAddFinace) => {
+export const ModalAddFinance = ({ isOpen, setIsOpen }: IModalAddFinace) => {
   const [isEntrada, setIsEntrada] = useState(true);
   const [isSaida, setIsSaida] = useState(false);
   const [isLoadingAddFinance, setIsLoadingAddFinance] = useState(false);
 
   const { userId } = useAuth();
+  const { handleGetFinances } = useFinances();
 
   const {
     handleSubmit,
@@ -94,17 +81,7 @@ export const ModalAddFinance = ({
         clearInputs();
       });
 
-    setIsLoadingValues(true);
-
-    getFinances(userId)
-      .then((resp) => {
-        setFinances(resp.finances);
-        setInflows(resp.inflows);
-        setOutflows(resp.outflows);
-        setTotal(resp.total);
-      })
-      .catch((err) => toast.error(err))
-      .finally(() => setIsLoadingValues(false));
+    handleGetFinances();
   };
 
   const handleCheckbox = () => {

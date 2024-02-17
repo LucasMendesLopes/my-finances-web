@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import ReactLoading from 'react-loading';
 
+import { useFinances } from '-src/hooks';
+import { deleteFinance } from '-src/services';
 import { colors } from '-src/styles/theme';
 import { IFinance } from '-src/types';
 import { formatNumber } from '-src/utils';
@@ -28,6 +30,8 @@ interface IFinancesTable {
 export const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
   const [deleteOpacity, setDeleteOpacity] = useState(false);
 
+  const { handleGetFinances } = useFinances();
+
   const columns = [
     { id: 'date', label: 'Data', width: 170 },
     { id: 'description', label: 'Descrição', width: 100 },
@@ -42,6 +46,11 @@ export const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
       return <ArrowCircleDown color={colors.red} size={25} />;
   };
 
+  const handleDeleteFinance = async (id: string) => {
+    await deleteFinance(id);
+    handleGetFinances();
+  };
+
   const handleRenderValue = (column: string, value: string, id: string) => {
     if (column === 'type') {
       return (
@@ -51,7 +60,7 @@ export const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
           <DeleteButton
             key={id}
             deleteOpacity={deleteOpacity}
-            onClick={() => null}
+            onClick={() => handleDeleteFinance(id)}
           >
             {<Trash color={colors.grey200} size={25} />}
           </DeleteButton>

@@ -16,6 +16,19 @@ interface IFinanceResp {
   total: number;
 }
 
+const getFinances = (userId: string): Promise<IFinanceResp> => {
+  return new Promise((resolve, reject) => {
+    api
+      .get(`/finances/${userId}`)
+      .then((resp) => {
+        return resolve(resp.data);
+      })
+      .catch((error) => {
+        reject(error.response.data.message);
+      });
+  });
+};
+
 const addFinance = (body: IFinanceBody): Promise<string> => {
   const { date, description, type, value, userId } = body;
 
@@ -31,12 +44,12 @@ const addFinance = (body: IFinanceBody): Promise<string> => {
   });
 };
 
-const getFinances = (userId: string): Promise<IFinanceResp> => {
+const deleteFinance = (financeId: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     api
-      .get(`/finances/${userId}`)
+      .delete(`/finances/${financeId}`)
       .then((resp) => {
-        return resolve(resp.data);
+        return resolve(resp.data.message);
       })
       .catch((error) => {
         reject(error.response.data.message);
@@ -44,4 +57,4 @@ const getFinances = (userId: string): Promise<IFinanceResp> => {
   });
 };
 
-export { addFinance, getFinances };
+export { addFinance, getFinances, deleteFinance };
