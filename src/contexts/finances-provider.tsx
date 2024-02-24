@@ -16,10 +16,10 @@ export const FinancesProvider = ({ children }: { children: JSX.Element }) => {
 
   const { userId } = useAuth();
 
-  const handleGetFinances = () => {
+  const handleGetFinances = (monthAndYear: string) => {
     setIsLoadingValues(true);
 
-    getFinances(userId)
+    getFinances(userId, monthAndYear)
       .then((resp) => {
         setFinances(resp.finances);
         setInflows(resp.inflows);

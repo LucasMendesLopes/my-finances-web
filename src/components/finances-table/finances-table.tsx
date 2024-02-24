@@ -25,9 +25,14 @@ import {
 interface IFinancesTable {
   rows: IFinance[] | [];
   isLoadingValues: boolean;
+  yearAndMonth: string;
 }
 
-export const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
+export const FinancesTable = ({
+  rows,
+  isLoadingValues,
+  yearAndMonth,
+}: IFinancesTable) => {
   const [deleteOpacity, setDeleteOpacity] = useState(false);
 
   const { handleGetFinances } = useFinances();
@@ -48,7 +53,7 @@ export const FinancesTable = ({ rows, isLoadingValues }: IFinancesTable) => {
 
   const handleDeleteFinance = async (id: string) => {
     await deleteFinance(id);
-    handleGetFinances();
+    handleGetFinances(yearAndMonth);
   };
 
   const handleRenderValue = (column: string, value: string, id: string) => {

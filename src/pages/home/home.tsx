@@ -7,12 +7,18 @@ import {
   ValueCards,
 } from '-src/components/index';
 import { useAuth, useFinances } from '-src/hooks';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { ptBR } from 'date-fns/locale';
 import { SignOut } from 'phosphor-react';
 
 import * as s from './styled-home';
 
 const Home = () => {
   const [modalAddFinanceIsOpen, setModalAddFinanceIsOpen] = useState(false);
+  const [defaultDate, setDefaultDate] = useState<Date>(new Date());
+
+  const formattedYearAndMonth = defaultDate.toISOString().slice(0, 7);
 
   const { signOut } = useAuth();
 
@@ -26,8 +32,8 @@ const Home = () => {
   } = useFinances();
 
   useEffect(() => {
-    handleGetFinances();
-  }, []);
+    handleGetFinances(formattedYearAndMonth);
+  }, [defaultDate]);
 
   return (
     <s.Container>
@@ -62,9 +68,25 @@ const Home = () => {
         <ModalAddFinance
           isOpen={modalAddFinanceIsOpen}
           setIsOpen={setModalAddFinanceIsOpen}
+          yearAndMonth={formattedYearAndMonth}
         />
 
-        <FinancesTable rows={finances} isLoadingValues={isLoadingValues} />
+        <LocalizationProvider adapterLocale={ptBR} dateAdapter={AdapterDateFns}>
+          <DatePicker
+            sx={{ marginRight: 'auto' }}
+            slotProps={{ textField: { placeholder: '' } }}
+            views={['month', 'year']}
+            label="Mês e Ano"
+            value={defaultDate}
+            onAccept={(value) => value && setDefaultDate(value)}
+          />
+        </LocalizationProvider>
+
+        <FinancesTable
+          rows={finances}
+          isLoadingValues={isLoadingValues}
+          yearAndMonth={formattedYearAndMonth}
+        />
       </s.ElementsContainer>
     </s.Container>
   );
