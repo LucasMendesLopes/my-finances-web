@@ -162,6 +162,7 @@ export const FinancesTable = ({
           count={totalPages}
           page={page}
           onChange={handlePageChange}
+          disabled={totalPages === 1}
         />
       )}
     </>
