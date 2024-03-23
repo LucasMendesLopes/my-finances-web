@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import ReactLoading from 'react-loading';
 
 import { useFinances } from '-src/hooks';
@@ -7,6 +7,7 @@ import { colors } from '-src/styles/theme';
 import { IFinance } from '-src/types';
 import { formatNumber } from '-src/utils';
 import {
+  Pagination,
   Table,
   TableBody,
   TableCell,
@@ -26,16 +27,27 @@ interface IFinancesTable {
   rows: IFinance[] | [];
   isLoadingValues: boolean;
   yearAndMonth: string;
+  page: number;
+  setPage: Dispatch<SetStateAction<number>>;
 }
 
 export const FinancesTable = ({
   rows,
   isLoadingValues,
   yearAndMonth,
+  page,
+  setPage,
 }: IFinancesTable) => {
   const [deleteOpacity, setDeleteOpacity] = useState(false);
+  const { handleGetFinances, totalPages } = useFinances();
 
-  const { handleGetFinances } = useFinances();
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+    handleGetFinances(value, yearAndMonth);
+  };
 
   const columns = [
     { id: 'date', label: 'Data', width: 170 },
@@ -53,7 +65,8 @@ export const FinancesTable = ({
 
   const handleDeleteFinance = async (id: string) => {
     await deleteFinance(id);
-    handleGetFinances(yearAndMonth);
+    setPage(1);
+    handleGetFinances(1, yearAndMonth);
   };
 
   const handleRenderValue = (column: string, value: string, id: string) => {
@@ -87,7 +100,7 @@ export const FinancesTable = ({
       );
     else if (rows?.length > 0)
       return (
-        <TableContainer sx={{ maxHeight: 500 }}>
+        <TableContainer>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -139,8 +152,18 @@ export const FinancesTable = ({
   };
 
   return (
-    <TableElementsContainer isLoadingValues={isLoadingValues}>
-      {handleRenderTable()}
-    </TableElementsContainer>
+    <>
+      <TableElementsContainer isLoadingValues={isLoadingValues}>
+        {handleRenderTable()}
+      </TableElementsContainer>
+
+      {rows?.length > 0 && (
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={handlePageChange}
+        />
+      )}
+    </>
   );
 };

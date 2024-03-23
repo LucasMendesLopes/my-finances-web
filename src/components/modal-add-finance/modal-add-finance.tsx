@@ -23,6 +23,7 @@ interface IModalAddFinace {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   yearAndMonth: string;
+  setPage: Dispatch<SetStateAction<number>>;
 }
 
 const addFinanceSchema = yup
@@ -37,6 +38,7 @@ export const ModalAddFinance = ({
   isOpen,
   setIsOpen,
   yearAndMonth,
+  setPage,
 }: IModalAddFinace) => {
   const [isEntrada, setIsEntrada] = useState(true);
   const [isSaida, setIsSaida] = useState(false);
@@ -86,7 +88,8 @@ export const ModalAddFinance = ({
         clearInputs();
       });
 
-    handleGetFinances(yearAndMonth);
+    setPage(1);
+    handleGetFinances(1, yearAndMonth);
   };
 
   const handleCheckbox = () => {

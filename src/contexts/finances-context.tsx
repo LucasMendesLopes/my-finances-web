@@ -8,7 +8,8 @@ interface FinancesContextType {
   inflows: number;
   outflows: number;
   total: number;
-  handleGetFinances: (monthAndYear: string) => void;
+  totalPages: number;
+  handleGetFinances: (page: number, monthAndYear: string) => void;
 }
 
 export const FinancesContext = createContext<FinancesContextType>({
@@ -17,6 +18,7 @@ export const FinancesContext = createContext<FinancesContextType>({
   inflows: 0,
   outflows: 0,
   total: 0,
+  totalPages: 0,
   handleGetFinances: () => {},
 });
 

@@ -17,6 +17,7 @@ import * as s from './styled-home';
 const Home = () => {
   const [modalAddFinanceIsOpen, setModalAddFinanceIsOpen] = useState(false);
   const [defaultDate, setDefaultDate] = useState<Date>(new Date());
+  const [page, setPage] = useState(1);
 
   const formattedYearAndMonth = defaultDate.toISOString().slice(0, 7);
 
@@ -32,7 +33,8 @@ const Home = () => {
   } = useFinances();
 
   useEffect(() => {
-    handleGetFinances(formattedYearAndMonth);
+    setPage(1);
+    handleGetFinances(page, formattedYearAndMonth);
   }, [defaultDate]);
 
   return (
@@ -69,6 +71,7 @@ const Home = () => {
           isOpen={modalAddFinanceIsOpen}
           setIsOpen={setModalAddFinanceIsOpen}
           yearAndMonth={formattedYearAndMonth}
+          setPage={setPage}
         />
 
         <LocalizationProvider adapterLocale={ptBR} dateAdapter={AdapterDateFns}>
@@ -84,6 +87,8 @@ const Home = () => {
 
         <FinancesTable
           rows={finances}
+          page={page}
+          setPage={setPage}
           isLoadingValues={isLoadingValues}
           yearAndMonth={formattedYearAndMonth}
         />

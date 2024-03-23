@@ -13,18 +13,20 @@ export const FinancesProvider = ({ children }: { children: JSX.Element }) => {
   const [inflows, setInflows] = useState<number>(0);
   const [outflows, setOutflows] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   const { userId } = useAuth();
 
-  const handleGetFinances = (monthAndYear: string) => {
+  const handleGetFinances = (page: number, monthAndYear: string) => {
     setIsLoadingValues(true);
 
-    getFinances(userId, monthAndYear)
+    getFinances(userId, page, monthAndYear)
       .then((resp) => {
         setFinances(resp.finances);
         setInflows(resp.inflows);
         setOutflows(resp.outflows);
         setTotal(resp.total);
+        setTotalPages(resp.totalPages);
       })
       .catch((err) => {
         console.error('Erro na chamada da API:', err);
@@ -44,6 +46,7 @@ export const FinancesProvider = ({ children }: { children: JSX.Element }) => {
         isLoadingValues,
         outflows,
         total,
+        totalPages,
       }}
     >
       {children}
