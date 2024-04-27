@@ -4,4 +4,22 @@ const formatNumber = (number: number) => {
   return number?.toLocaleString('pt-br', { minimumFractionDigits: 2 });
 };
 
-export { yupGeneralSchema, formatNumber };
+const maskCurrency = (value: string | undefined) => {
+  value = value?.replace(/[^\d]/g, '');
+
+  if (!value || isNaN(Number(value))) return '';
+
+  value = value.replace(/^0+/, '');
+
+  const integerPart = value.slice(0, -2) || '0';
+  const decimalPart = value.slice(-2).padStart(2, '0');
+
+  const formattedIntegerPart = integerPart.replace(
+    /(\d)(?=(\d{3})+(?!\d))/g,
+    '$1.'
+  );
+
+  return `${formattedIntegerPart},${decimalPart}`;
+};
+
+export { yupGeneralSchema, formatNumber, maskCurrency };

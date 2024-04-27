@@ -38,12 +38,9 @@ export const EmptyTableText = styled.p`
   font-weight: 600;
 `;
 
-export const DeleteButton = styled.button<{ deleteOpacity: boolean }>`
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.5s ease;
-  transform: translateX(${({ deleteOpacity }) => (deleteOpacity ? 0 : 100)}px);
+export const ButtonsContainer = styled.div`
+  display: flex;
+  gap: 2rem;
 
   @media (max-width: 950px) {
     margin-left: 32px;

@@ -6,6 +6,7 @@ import { FinancesTable } from './finances-table/finances-table';
 import { InputPassword } from './input-password/input-password';
 import { Input } from './input/input';
 import { ModalAddFinance } from './modal-add-finance/modal-add-finance';
+import { ModalEditFinance } from './modal-edit-finance/modal-edit-finance';
 import { RoutesLayout } from './routes-layout/routes-layout';
 import { ValueCards } from './value-cards/value-cards';
 
@@ -17,6 +18,7 @@ export {
   FinancesTable,
   Input,
   ModalAddFinance,
+  ModalEditFinance,
   InputPassword,
   RoutesLayout,
   ValueCards,

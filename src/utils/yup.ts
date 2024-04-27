@@ -14,8 +14,7 @@ export const yupGeneralSchema = {
     .required(requiredFieldMessage)
     .matches(noWhiteSpaceRegex, whiteSpaceText),
   value: yup
-    .number()
+    .string()
     .required(requiredFieldMessage)
-    .min(1, 'O valor deve ser maior que 0.')
     .typeError(requiredFieldMessage),
 };

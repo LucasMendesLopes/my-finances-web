@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction, useState } from 'react';
+import toast from 'react-hot-toast';
 import ReactLoading from 'react-loading';
 
 import { useFinances } from '-src/hooks';
 import { deleteFinance } from '-src/services';
 import { colors } from '-src/styles/theme';
 import { IFinance } from '-src/types';
-import { formatNumber } from '-src/utils';
 import {
   Pagination,
   Table,
@@ -15,10 +15,16 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { ArrowCircleDown, ArrowCircleUp, Trash } from 'phosphor-react';
-
 import {
-  DeleteButton,
+  ArrowCircleDown,
+  ArrowCircleUp,
+  Trash,
+  PencilSimple,
+} from 'phosphor-react';
+
+import { ModalEditFinance } from '../modal-edit-finance/modal-edit-finance';
+import {
+  ButtonsContainer,
   EmptyTableText,
   TableElementsContainer,
 } from './styled-finances-table';
@@ -38,8 +44,15 @@ export const FinancesTable = ({
   page,
   setPage,
 }: IFinancesTable) => {
-  const [deleteOpacity, setDeleteOpacity] = useState(false);
   const { handleGetFinances, totalPages } = useFinances();
+  const [modalEditFinanceIsOpen, setModalEditFinanceIsOpen] = useState(false);
+  const [modalDefaultValues, setModalDefaultValues] = useState({
+    _id: '',
+    date: '',
+    description: '',
+    type: '',
+    value: '',
+  });
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -53,7 +66,7 @@ export const FinancesTable = ({
     { id: 'date', label: 'Data', width: 170 },
     { id: 'description', label: 'Descrição', width: 100 },
     { id: 'value', label: 'Valor', width: 100 },
-    { id: 'type', label: 'Tipo', width: 100 },
+    { id: 'type', label: 'Categoria', width: 100 },
   ];
 
   const handleRenderIcon = (type: string) => {
@@ -64,28 +77,43 @@ export const FinancesTable = ({
   };
 
   const handleDeleteFinance = async (id: string) => {
-    await deleteFinance(id);
+    await deleteFinance(id)
+      .then((resp) => {
+        toast.success(resp);
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+
     setPage(1);
     handleGetFinances(1, yearAndMonth);
   };
 
-  const handleRenderValue = (column: string, value: string, id: string) => {
+  const handleRenderValue = (column: string, value: string, row: IFinance) => {
     if (column === 'type') {
       return (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           {handleRenderIcon(value)}
 
-          <DeleteButton
-            key={id}
-            deleteOpacity={deleteOpacity}
-            onClick={() => handleDeleteFinance(id)}
-          >
-            {<Trash color={colors.grey200} size={25} />}
-          </DeleteButton>
+          <ButtonsContainer>
+            <button
+              onClick={() => {
+                setModalDefaultValues(row);
+                setModalEditFinanceIsOpen(true);
+              }}
+            >
+              {<PencilSimple color={colors.grey200} size={25} />}
+            </button>
+
+            <button onClick={() => handleDeleteFinance(row._id)}>
+              {<Trash color={colors.grey200} size={25} />}
+            </button>
+          </ButtonsContainer>
         </div>
       );
-    } else if (column === 'value') return `R$ ${formatNumber(Number(value))}`;
-    else return value;
+    } else if (column === 'value') return `R$ ${value}`;
+
+    return value;
   };
 
   const handleRenderTable = () => {
@@ -118,23 +146,12 @@ export const FinancesTable = ({
             <TableBody>
               {rows?.map((row) => {
                 return (
-                  <TableRow
-                    onMouseOver={() => {
-                      setDeleteOpacity(true);
-                    }}
-                    onMouseOut={() => {
-                      setDeleteOpacity(false);
-                    }}
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row._id}
-                  >
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                     {columns.map((column) => {
                       const value = (row as { [k in string]: any })[column.id];
                       return (
                         <TableCell key={column.id}>
-                          {handleRenderValue(column.id, value, row._id)}
+                          {handleRenderValue(column.id, value, row)}
                         </TableCell>
                       );
                     })}
@@ -156,6 +173,17 @@ export const FinancesTable = ({
       <TableElementsContainer isLoadingValues={isLoadingValues}>
         {handleRenderTable()}
       </TableElementsContainer>
+
+      {Object.keys(modalDefaultValues).length > 0 && (
+        <ModalEditFinance
+          isOpen={modalEditFinanceIsOpen}
+          setIsOpen={setModalEditFinanceIsOpen}
+          yearAndMonth={yearAndMonth}
+          setPage={setPage}
+          modalDefaultValues={modalDefaultValues}
+          setModalDefaultValues={setModalDefaultValues}
+        />
+      )}
 
       {rows?.length > 0 && (
         <Pagination

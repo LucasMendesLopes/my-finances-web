@@ -9,6 +9,7 @@ type IInput = {
   errorMessage?: string;
   defaultValue?: string | null;
   width?: string;
+  mask?: (value: string) => string;
 } & TextFieldProps;
 
 export const Input = ({
@@ -17,13 +18,19 @@ export const Input = ({
   errorMessage,
   defaultValue,
   width,
+  mask,
   ...props
 }: IInput) => {
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     onChange: (text: string) => void
   ) => {
-    const text = e.target.value;
+    let text = e.target.value;
+
+    if (mask) {
+      text = mask(text);
+    }
+
     onChange(text);
   };
 

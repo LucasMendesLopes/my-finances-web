@@ -3,8 +3,9 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { CustomButton, DateInput, Input } from '-components/index';
-import { useAuth, useFinances } from '-src/hooks';
-import { addFinance } from '-src/services/finance.service';
+import { useFinances } from '-src/hooks';
+import { editFinance } from '-src/services/finance.service';
+import { IFinance } from '-src/types';
 import { maskCurrency } from '-src/utils';
 import { yupGeneralSchema } from '-src/utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -20,11 +21,15 @@ interface IFinanceFormValues {
   value: string;
 }
 
-interface IModalAddFinace {
+interface IDefaultValues extends Omit<IFinance, 'userId'> {}
+
+interface IModalEditFinance {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   yearAndMonth: string;
   setPage: Dispatch<SetStateAction<number>>;
+  modalDefaultValues: IDefaultValues;
+  setModalDefaultValues: Dispatch<SetStateAction<any>>;
 }
 
 const addFinanceSchema = yup
@@ -35,18 +40,24 @@ const addFinanceSchema = yup
   })
   .required();
 
-export const ModalAddFinance = ({
+export const ModalEditFinance = ({
   isOpen,
   setIsOpen,
   yearAndMonth,
   setPage,
-}: IModalAddFinace) => {
-  const [isEntrada, setIsEntrada] = useState(true);
-  const [isSaida, setIsSaida] = useState(false);
-  const [isLoadingAddFinance, setIsLoadingAddFinance] = useState(false);
+  modalDefaultValues,
+  setModalDefaultValues,
+}: IModalEditFinance) => {
+  const [isEntrada, setIsEntrada] = useState(
+    modalDefaultValues.type === 'entrada'
+  );
+  const [isSaida, setIsSaida] = useState(modalDefaultValues.type === 'saida');
+  const [isLoadingEditFinance, setIsLoadingEditFinance] = useState(false);
 
-  const { userId } = useAuth();
   const { handleGetFinances } = useFinances();
+
+  const separateDate = modalDefaultValues.date.split('/');
+  const formatedDate = `${separateDate[2]}, ${separateDate[1]}, ${separateDate[0]}`;
 
   const {
     handleSubmit,
@@ -55,14 +66,22 @@ export const ModalAddFinance = ({
     reset,
   } = useForm<IFinanceFormValues>({
     resolver: yupResolver(addFinanceSchema),
+    defaultValues: {
+      date: new Date(formatedDate),
+      description: modalDefaultValues?.description,
+      value: modalDefaultValues?.value,
+    },
+    shouldUnregister: true,
   });
 
   const clearInputs = () => {
+    setModalDefaultValues({});
     reset({});
   };
 
   const onSubmit = async (dataFields: IFinanceFormValues) => {
-    setIsLoadingAddFinance(true);
+    clearInputs();
+    setIsLoadingEditFinance(true);
 
     const { date, description, value } = dataFields;
 
@@ -77,10 +96,10 @@ export const ModalAddFinance = ({
       description,
       type: financeType,
       value: formatedValue,
-      userId,
+      financeId: modalDefaultValues?._id,
     };
 
-    await addFinance(body)
+    await editFinance(body)
       .then((resp) => {
         toast.success(resp);
       })
@@ -88,37 +107,39 @@ export const ModalAddFinance = ({
         toast.error(error);
       })
       .finally(() => {
-        setIsLoadingAddFinance(false);
-        setIsOpen(false);
         clearInputs();
+        setIsLoadingEditFinance(false);
+        setIsOpen(false);
       });
 
     setPage(1);
     handleGetFinances(1, yearAndMonth);
   };
 
-  const handleCheckbox = () => {
-    if (isEntrada) {
-      setIsEntrada(false);
-      setIsSaida(true);
-    } else {
+  const handleCheckbox = (checkboxType: string) => {
+    if (checkboxType === 'entrada') {
       setIsEntrada(true);
       setIsSaida(false);
+    } else {
+      setIsEntrada(false);
+      setIsSaida(true);
     }
   };
 
   const handleClose = () => {
-    setIsOpen(false);
     clearInputs();
+    setIsEntrada((prev) => prev);
+    setIsSaida((prev) => prev);
+    setIsOpen(false);
   };
 
   return (
     <BaseModal
       width="33.5rem"
       maxWidth="90%"
-      title="Cadastrar transação"
+      title="Editar transação"
       isOpen={isOpen}
-      onClose={() => !isLoadingAddFinance && handleClose()}
+      onClose={() => !isLoadingEditFinance && handleClose()}
     >
       <s.Form onSubmit={handleSubmit(onSubmit)}>
         <s.InputsContainer>
@@ -147,15 +168,24 @@ export const ModalAddFinance = ({
 
           <div>
             <FormControlLabel
-              color="red"
               control={
-                <Checkbox checked={isEntrada} onChange={handleCheckbox} />
+                <Checkbox
+                  checked={isEntrada}
+                  onChange={() => handleCheckbox('entrada')}
+                  value="entrada"
+                />
               }
               label="entrada"
             />
 
             <FormControlLabel
-              control={<Checkbox checked={isSaida} onChange={handleCheckbox} />}
+              control={
+                <Checkbox
+                  checked={isSaida}
+                  onChange={() => handleCheckbox('saida')}
+                  value="saida"
+                />
+              }
               label="saída"
             />
           </div>
@@ -165,13 +195,13 @@ export const ModalAddFinance = ({
           <CustomButton
             text="Cancelar"
             variant="outlined"
-            disabled={isLoadingAddFinance}
+            disabled={isLoadingEditFinance}
             onClick={handleClose}
           />
 
           <CustomButton
-            text="Cadastrar"
-            isLoading={isLoadingAddFinance}
+            text="Editar"
+            isLoading={isLoadingEditFinance}
             type="submit"
           />
         </s.ButtonsContainer>

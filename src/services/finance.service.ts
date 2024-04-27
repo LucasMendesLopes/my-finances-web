@@ -1,12 +1,16 @@
 import { api } from '-src/api/api';
 import { IFinance } from '-src/types';
 
-interface IFinanceBody {
+interface IAddFinanceBody {
   date: Date;
   description: string;
   type: string;
   value: number;
   userId: string;
+}
+
+interface IEditFinanceBody extends Omit<IAddFinanceBody, 'userId'> {
+  financeId: string;
 }
 
 interface IFinanceResp {
@@ -34,12 +38,27 @@ const getFinances = (
   });
 };
 
-const addFinance = (body: IFinanceBody): Promise<string> => {
+const addFinance = (body: IAddFinanceBody): Promise<string> => {
   const { date, description, type, value, userId } = body;
 
   return new Promise((resolve, reject) => {
     api
       .post('/finances', { date, description, type, value, userId })
+      .then((resp) => {
+        return resolve(resp.data.message);
+      })
+      .catch((error) => {
+        reject(error.response.data.message);
+      });
+  });
+};
+
+const editFinance = (body: IEditFinanceBody): Promise<string> => {
+  const { date, description, type, value, financeId } = body;
+
+  return new Promise((resolve, reject) => {
+    api
+      .put(`/finances/${financeId}`, { date, description, type, value })
       .then((resp) => {
         return resolve(resp.data.message);
       })
@@ -62,4 +81,4 @@ const deleteFinance = (financeId: string): Promise<string> => {
   });
 };
 
-export { addFinance, getFinances, deleteFinance };
+export { addFinance, editFinance, getFinances, deleteFinance };

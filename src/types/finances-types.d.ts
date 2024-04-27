@@ -3,6 +3,6 @@ export interface IFinance {
   date: string;
   description: string;
   type: string;
-  value: number;
+  value: string;
   userId: string;
 }
