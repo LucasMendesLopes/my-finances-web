@@ -174,7 +174,7 @@ export const FinancesTable = ({
         {handleRenderTable()}
       </TableElementsContainer>
 
-      {Object.keys(modalDefaultValues).length > 0 && (
+      {Object.values(modalDefaultValues).some((value) => value !== '') && (
         <ModalEditFinance
           isOpen={modalEditFinanceIsOpen}
           setIsOpen={setModalEditFinanceIsOpen}

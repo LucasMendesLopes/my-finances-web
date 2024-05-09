@@ -68,8 +68,8 @@ export const ModalEditFinance = ({
     resolver: yupResolver(addFinanceSchema),
     defaultValues: {
       date: new Date(formatedDate),
-      description: modalDefaultValues?.description,
-      value: modalDefaultValues?.value,
+      description: modalDefaultValues.description,
+      value: modalDefaultValues.value,
     },
     shouldUnregister: true,
   });
