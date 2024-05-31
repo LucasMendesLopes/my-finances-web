@@ -10,9 +10,9 @@ O My Finances é um sistema desenvolvido para que você tenha um melhor controle
 
 As seguintes tecnologias foram usadas na construção do projeto:
 
-- [React](https://react.dev/)
+- [React JS](https://react.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
-- [Firebase](https://firebase.google.com/?hl=pt)
+- [Node JS](https://nodejs.org/en)
 
 ## Pré-requisitos
 
