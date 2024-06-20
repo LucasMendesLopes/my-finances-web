@@ -13,6 +13,7 @@ As seguintes tecnologias foram usadas na construção do projeto:
 - [React JS](https://react.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Node JS](https://nodejs.org/en)
+- [Mongo DB](https://www.mongodb.com/pt-br)
 
 ## Pré-requisitos
 
