@@ -31,20 +31,10 @@ Pelo terminal:
 - Vá até a pasta que você acabou de clonar. Exemplo: `cd user/projetos/my-finances`
 - Utilizando **npm** ou **yarn**, instale as dependências do projeto. Exemplo: execute o comando `yarn` ou `npm i`
 
-## Configurando o banco de dados
-
-- Crie sua conta gratuitamente no Firebase: <link>https://firebase.google.com/?hl=pt<link> e siga o passo a passo nas imagens a seguir:
-
- <img src="./public/assets/images/1.png" />
- <img src="./public/assets/images/2.png" />
- <img src="./public/assets/images/3.png" />
- <img src="./public/assets/images/4.png" />
- <img src="./public/assets/images/5.png" />
- <img src="./public/assets/images/6.png" />
- <img src="./public/assets/images/7.png" />
+## Configurando o backend - https://github.com/LucasMendesLopes/my-finances-server
 
 ## Variáveis de Ambiente - ENVS
 
-- Copie o arquivo .env.exemple presente na pasta `configs`, cole na pasta `src`, renomeie para .env e substitua as informaçãoes depois de cada "=" conforme as envs que estão na configuração do projeto no Firebase (imagem acima).
+- Copie o arquivo .env.exemple presente na pasta `configs`, cole na pasta `src`, renomeie para .env e substitua as informaçãoes caso seja necessário.
 
 ## Agora, basta executar `yarn start` ou `npm start` e o projeto vai iniciar o sistema no seu navegador.
