@@ -1,4 +1,5 @@
 import { Card } from '-components/index';
+import { colors } from '-src/styles/theme';
 import {
   ArrowCircleDown,
   ArrowCircleUp,
@@ -6,7 +7,6 @@ import {
 } from 'phosphor-react';
 
 import { CardsContainer } from './styled-value-cards';
-import { colors } from '-src/styles/theme';
 
 interface IValueCards {
   inflows: number;
@@ -25,20 +25,20 @@ export const ValueCards = ({
     {
       title: 'Entradas',
       icon: (
-        <ArrowCircleUp color={colors.green} size={'100%'} id="icon-entrada" />
+        <ArrowCircleUp color={colors.green} size={35} id="icon-entrada" />
       ),
       value: inflows,
     },
     {
       title: 'Saídas',
       icon: (
-        <ArrowCircleDown color={colors.red} size={'100%'} id="icon-saida" />
+        <ArrowCircleDown color={colors.red} size={35} id="icon-saida" />
       ),
       value: outflows,
     },
     {
       title: 'Total',
-      icon: <CurrencyCircleDollar color="#2161b5" size={'100%'} />,
+      icon: <CurrencyCircleDollar color="#2161b5" size={35} />,
       value: total || 0,
     },
   ];

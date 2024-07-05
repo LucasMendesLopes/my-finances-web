@@ -23,9 +23,16 @@ export const FormContainer = styled.div`
   width: 50%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 20px;
+
+  #back-button{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
 `;
 
 export const Form = styled.form`

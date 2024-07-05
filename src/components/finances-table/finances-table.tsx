@@ -71,9 +71,9 @@ export const FinancesTable = ({
 
   const handleRenderIcon = (type: string) => {
     if (type === 'entrada')
-      return <ArrowCircleUp color={colors.green} size={25} />;
+      return <ArrowCircleUp color={colors.green} size={35} />;
     else if (type === 'saida')
-      return <ArrowCircleDown color={colors.red} size={25} />;
+      return <ArrowCircleDown color={colors.red} size={35} />;
   };
 
   const handleDeleteFinance = async (id: string) => {
@@ -102,11 +102,11 @@ export const FinancesTable = ({
                 setModalEditFinanceIsOpen(true);
               }}
             >
-              {<PencilSimple color={colors.grey200} size={25} />}
+              {<PencilSimple color={colors.grey200} size={30} />}
             </button>
 
             <button onClick={() => handleDeleteFinance(row._id)}>
-              {<Trash color={colors.grey200} size={25} />}
+              {<Trash color={colors.grey200} size={30} />}
             </button>
           </ButtonsContainer>
         </div>

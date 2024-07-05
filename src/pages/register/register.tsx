@@ -5,7 +5,9 @@ import toast from 'react-hot-toast';
 import { CustomButton, Input, InputPassword } from '-src/components';
 import { useAuth } from '-src/hooks';
 import { register } from '-src/services';
+import { colors } from '-src/styles/theme';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ArrowLeft } from 'phosphor-react';
 import * as yup from 'yup';
 
 import * as s from './styled-register';
@@ -71,6 +73,10 @@ const Register = () => {
   return (
     <s.Container>
       <s.FormContainer>
+        <a id='back-button' href='/login'>
+          <ArrowLeft color={colors.grey200} size={30} />
+        </a>
+
         <s.Form onSubmit={handleSubmit(onSubmit)}>
           <s.InputsContainer>
             <Input

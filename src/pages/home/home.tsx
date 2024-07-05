@@ -44,7 +44,7 @@ const Home = () => {
           alt="sair"
           id="logout-button"
           onClick={signOut}
-          size={25}
+          size={30}
           weight="regular"
         />
       </s.Header>
