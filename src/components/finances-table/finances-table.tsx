@@ -31,20 +31,16 @@ import {
 
 interface IFinancesTable {
   rows: IFinance[] | [];
-  isLoadingValues: boolean;
-  yearAndMonth: string;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
 }
 
 export const FinancesTable = ({
   rows,
-  isLoadingValues,
-  yearAndMonth,
   page,
   setPage,
 }: IFinancesTable) => {
-  const { handleGetFinances, totalPages } = useFinances();
+  const { handleGetFinances, totalPages, isLoadingValues, yearAndMonth, description, setDescription } = useFinances();
   const [modalEditFinanceIsOpen, setModalEditFinanceIsOpen] = useState(false);
   const [modalDefaultValues, setModalDefaultValues] = useState({
     _id: '',
@@ -59,7 +55,7 @@ export const FinancesTable = ({
     value: number
   ) => {
     setPage(value);
-    handleGetFinances(value, yearAndMonth);
+    handleGetFinances(value, description, yearAndMonth);
   };
 
   const columns = [
@@ -86,7 +82,8 @@ export const FinancesTable = ({
       });
 
     setPage(1);
-    handleGetFinances(1, yearAndMonth);
+    setDescription("")
+    handleGetFinances(1, "", yearAndMonth);
   };
 
   const handleRenderValue = (column: string, value: string, row: IFinance) => {
@@ -135,7 +132,7 @@ export const FinancesTable = ({
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
-                    style={{ width: column.width, fontWeight: 'bold' }}
+                    style={{ width: column.width, fontWeight: 'bold', fontSize: '1.2rem' }}
                   >
                     <h3>{column.label}</h3>
                   </TableCell>
@@ -150,7 +147,7 @@ export const FinancesTable = ({
                     {columns.map((column) => {
                       const value = (row as { [k in string]: any })[column.id];
                       return (
-                        <TableCell key={column.id}>
+                        <TableCell key={column.id} style={{ fontSize: '1.2rem' }}>
                           {handleRenderValue(column.id, value, row)}
                         </TableCell>
                       );
@@ -178,7 +175,6 @@ export const FinancesTable = ({
         <ModalEditFinance
           isOpen={modalEditFinanceIsOpen}
           setIsOpen={setModalEditFinanceIsOpen}
-          yearAndMonth={yearAndMonth}
           setPage={setPage}
           modalDefaultValues={modalDefaultValues}
           setModalDefaultValues={setModalDefaultValues}
@@ -187,6 +183,7 @@ export const FinancesTable = ({
 
       {rows?.length > 0 && (
         <Pagination
+          sx={{ margin: '0 auto' }}
           count={totalPages}
           page={page}
           onChange={handlePageChange}

@@ -1,4 +1,5 @@
 import { Card } from '-components/index';
+import { useFinances } from '-src/hooks';
 import { colors } from '-src/styles/theme';
 import {
   ArrowCircleDown,
@@ -8,19 +9,9 @@ import {
 
 import { CardsContainer } from './styled-value-cards';
 
-interface IValueCards {
-  inflows: number;
-  outflows: number;
-  total: number;
-  isLoadingValues: boolean;
-}
+export const ValueCards = () => {
+  const { inflows, outflows, total, isLoadingValues } = useFinances()
 
-export const ValueCards = ({
-  inflows,
-  outflows,
-  total,
-  isLoadingValues,
-}: IValueCards) => {
   const cards = [
     {
       title: 'Entradas',

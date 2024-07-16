@@ -38,8 +38,7 @@ export const ElementsContainer = styled.div`
   width: 90%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  align-items: center;
+  gap: 2rem;
   margin-top: 6rem;
   padding-bottom: 6rem;
 
@@ -48,10 +47,51 @@ export const ElementsContainer = styled.div`
   }
 `;
 
-export const NewTransactionContainer = styled.div`
-  width: 100%;
+export const FiltersFormContainer = styled.form`
   display: flex;
-  justify-content: space-between;
-  margin: 0 auto;
-  color: white;
+  width: 100%;
+  gap: 1rem;
+
+  @media (max-width: 1100px) {
+    flex-direction: column;
+
+    button {
+      max-width: 100%;
+    }
+  }
+`;
+
+export const InputsFormContainer = styled.div`
+  max-width: 50%;
+  display: flex;
+  gap: 1rem;
+
+  @media (max-width: 1100px) {
+    max-width: 100%;
+  }
+
+  @media (max-width: 550px) {
+    flex-direction: column;
+  }
+`;
+export const ButtonsFormContainer = styled.div`
+  max-width: 50%;
+  display: flex;
+  gap: 1rem;
+
+  button {
+    width: 14rem;
+  }
+
+  @media (max-width: 1100px) {
+    max-width: 100%;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 550px) {
+    flex-direction: column;
+  }
 `;

@@ -4,6 +4,10 @@ const formatNumber = (number: number) => {
   return number?.toLocaleString('pt-br', { minimumFractionDigits: 2 });
 };
 
+const formatDateToYearAndMonth = (date: Date | null) => {
+  return date?.toISOString().slice(0, 7) || ''
+}
+
 const maskCurrency = (value: string | undefined) => {
   value = value?.replace(/[^\d]/g, '');
 
@@ -22,4 +26,4 @@ const maskCurrency = (value: string | undefined) => {
   return `${formattedIntegerPart},${decimalPart}`;
 };
 
-export { yupGeneralSchema, formatNumber, maskCurrency };
+export { yupGeneralSchema, formatNumber, maskCurrency, formatDateToYearAndMonth };

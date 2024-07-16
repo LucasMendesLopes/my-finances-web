@@ -21,12 +21,11 @@ interface IFinanceFormValues {
   value: string;
 }
 
-interface IDefaultValues extends Omit<IFinance, 'userId'> {}
+interface IDefaultValues extends Omit<IFinance, 'userId'> { }
 
 interface IModalEditFinance {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  yearAndMonth: string;
   setPage: Dispatch<SetStateAction<number>>;
   modalDefaultValues: IDefaultValues;
   setModalDefaultValues: Dispatch<SetStateAction<any>>;
@@ -43,7 +42,6 @@ const addFinanceSchema = yup
 export const ModalEditFinance = ({
   isOpen,
   setIsOpen,
-  yearAndMonth,
   setPage,
   modalDefaultValues,
   setModalDefaultValues,
@@ -54,7 +52,7 @@ export const ModalEditFinance = ({
   const [isSaida, setIsSaida] = useState(modalDefaultValues.type === 'saida');
   const [isLoadingEditFinance, setIsLoadingEditFinance] = useState(false);
 
-  const { handleGetFinances } = useFinances();
+  const { handleGetFinances, yearAndMonth, setDescription } = useFinances();
 
   const separateDate = modalDefaultValues.date.split('/');
   const formatedDate = `${separateDate[2]}, ${separateDate[1]}, ${separateDate[0]}`;
@@ -113,7 +111,8 @@ export const ModalEditFinance = ({
       });
 
     setPage(1);
-    handleGetFinances(1, yearAndMonth);
+    setDescription("")
+    handleGetFinances(1, "", yearAndMonth);
   };
 
   const handleCheckbox = (checkboxType: string) => {

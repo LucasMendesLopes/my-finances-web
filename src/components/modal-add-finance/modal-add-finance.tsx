@@ -23,7 +23,6 @@ interface IFinanceFormValues {
 interface IModalAddFinace {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  yearAndMonth: string;
   setPage: Dispatch<SetStateAction<number>>;
 }
 
@@ -38,7 +37,6 @@ const addFinanceSchema = yup
 export const ModalAddFinance = ({
   isOpen,
   setIsOpen,
-  yearAndMonth,
   setPage,
 }: IModalAddFinace) => {
   const [isEntrada, setIsEntrada] = useState(true);
@@ -46,7 +44,7 @@ export const ModalAddFinance = ({
   const [isLoadingAddFinance, setIsLoadingAddFinance] = useState(false);
 
   const { userId } = useAuth();
-  const { handleGetFinances } = useFinances();
+  const { handleGetFinances, yearAndMonth, setDescription } = useFinances();
 
   const {
     handleSubmit,
@@ -94,7 +92,8 @@ export const ModalAddFinance = ({
       });
 
     setPage(1);
-    handleGetFinances(1, yearAndMonth);
+    setDescription("")
+    handleGetFinances(1, "", yearAndMonth);
   };
 
   const handleCheckbox = () => {

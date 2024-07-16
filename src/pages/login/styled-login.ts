@@ -61,6 +61,7 @@ export const RegisterRedirect = styled.div`
   display: flex;
   gap: 5px;
   font-weight: bold;
+  font-size: 1.2rem;
 
   span {
     color: ${colors.grey200};
@@ -69,9 +70,5 @@ export const RegisterRedirect = styled.div`
   a {
     color: ${colors.blue200};
     text-decoration: none;
-
-    :hover {
-      text-decoration: underline;
-    }
   }
 `;

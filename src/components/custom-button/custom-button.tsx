@@ -33,10 +33,14 @@ export const CustomButton = ({
       size="large"
       type="button"
       fullWidth
-      sx={{ pointerEvents: isLoading ? 'none' : 'auto' }}
+      sx={{
+        pointerEvents: isLoading ? 'none' : 'auto', '.MuiTypography-root': {
+          fontWeight: '600'
+        }
+      }}
       {...props}
     >
       {handleButtonTextRender()}
-    </Button>
+    </Button >
   );
 };

@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 
 import { IFinance } from '-src/types';
 
@@ -9,7 +9,11 @@ interface FinancesContextType {
   outflows: number;
   total: number;
   totalPages: number;
-  handleGetFinances: (page: number, monthAndYear: string) => void;
+  yearAndMonth: string;
+  setYearAndMonth: Dispatch<SetStateAction<string>>
+  description: string;
+  setDescription: Dispatch<SetStateAction<string>>
+  handleGetFinances: (page: number, description: string, monthAndYear: string) => void;
 }
 
 export const FinancesContext = createContext<FinancesContextType>({
@@ -19,7 +23,11 @@ export const FinancesContext = createContext<FinancesContextType>({
   outflows: 0,
   total: 0,
   totalPages: 0,
-  handleGetFinances: () => {},
+  yearAndMonth: "",
+  setYearAndMonth: () => { },
+  description: "",
+  setDescription: () => { },
+  handleGetFinances: () => { },
 });
 
 export const useFinances = (): FinancesContextType => {

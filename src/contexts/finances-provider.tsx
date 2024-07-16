@@ -9,6 +9,8 @@ import { FinancesContext } from './finances-context';
 
 export const FinancesProvider = ({ children }: { children: JSX.Element }) => {
   const [isLoadingValues, setIsLoadingValues] = useState(false);
+  const [yearAndMonth, setYearAndMonth] = useState(new Date().toISOString().slice(0, 7));
+  const [description, setDescription] = useState("");
   const [finances, setFinances] = useState<IFinance[]>([]);
   const [inflows, setInflows] = useState<number>(0);
   const [outflows, setOutflows] = useState<number>(0);
@@ -17,10 +19,10 @@ export const FinancesProvider = ({ children }: { children: JSX.Element }) => {
 
   const { userId } = useAuth();
 
-  const handleGetFinances = (page: number, monthAndYear: string) => {
+  const handleGetFinances = (page: number, description: string, monthAndYear: string) => {
     setIsLoadingValues(true);
 
-    getFinances(userId, page, monthAndYear)
+    getFinances(userId, page, description, monthAndYear)
       .then((resp) => {
         setFinances(resp.finances);
         setInflows(resp.inflows);
@@ -47,6 +49,10 @@ export const FinancesProvider = ({ children }: { children: JSX.Element }) => {
         outflows,
         total,
         totalPages,
+        yearAndMonth,
+        description,
+        setDescription,
+        setYearAndMonth
       }}
     >
       {children}

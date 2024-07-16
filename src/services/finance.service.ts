@@ -24,11 +24,14 @@ interface IFinanceResp {
 const getFinances = (
   userId: string,
   page: number,
+  description: string,
   yearAndMonth: string
 ): Promise<IFinanceResp> => {
   return new Promise((resolve, reject) => {
     api
-      .get(`/finances/${userId}?yearAndMonth=${yearAndMonth}&&page=${page}`)
+      .get(
+        `/finances/${userId}?yearAndMonth=${yearAndMonth}&&page=${page}&&description=${description}`
+      )
       .then((resp) => {
         return resolve(resp.data);
       })

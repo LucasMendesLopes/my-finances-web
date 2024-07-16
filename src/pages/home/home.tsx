@@ -1,41 +1,53 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 
 import {
   CustomButton,
   FinancesTable,
+  Input,
   ModalAddFinance,
   ValueCards,
 } from '-src/components/index';
 import { useAuth, useFinances } from '-src/hooks';
+import { formatDateToYearAndMonth } from '-src/utils';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ptBR } from 'date-fns/locale';
 import { SignOut } from 'phosphor-react';
 
 import * as s from './styled-home';
+interface FormData {
+  date: Date | null;
+  description: string;
+}
 
 const Home = () => {
   const [modalAddFinanceIsOpen, setModalAddFinanceIsOpen] = useState(false);
-  const [defaultDate, setDefaultDate] = useState<Date>(new Date());
   const [page, setPage] = useState(1);
 
-  const formattedYearAndMonth = defaultDate.toISOString().slice(0, 7);
+  const { handleSubmit, control } = useForm<FormData>();
 
   const { signOut } = useAuth();
 
   const {
     handleGetFinances,
     finances,
-    inflows,
-    isLoadingValues,
-    outflows,
-    total,
+    yearAndMonth,
+    setYearAndMonth,
+    description,
+    setDescription
   } = useFinances();
 
   useEffect(() => {
+    handleGetFinances(page, "", yearAndMonth);
+  }, []);
+
+  const onSubmit = async (dataFields: FormData) => {
     setPage(1);
-    handleGetFinances(page, formattedYearAndMonth);
-  }, [defaultDate]);
+    setYearAndMonth(formatDateToYearAndMonth(dataFields.date))
+
+    handleGetFinances(1, description, formatDateToYearAndMonth(dataFields.date));
+  };
 
   return (
     <s.Container>
@@ -50,47 +62,62 @@ const Home = () => {
       </s.Header>
 
       <s.ElementsContainer>
-        <s.NewTransactionContainer>
-          <h1>Finanças</h1>
-
-          <CustomButton
-            text="Nova transação"
-            onClick={() => setModalAddFinanceIsOpen(true)}
-            sx={{ maxWidth: '14rem' }}
-          />
-        </s.NewTransactionContainer>
-
-        <ValueCards
-          inflows={inflows}
-          outflows={outflows}
-          total={total}
-          isLoadingValues={isLoadingValues}
-        />
+        <ValueCards />
 
         <ModalAddFinance
           isOpen={modalAddFinanceIsOpen}
           setIsOpen={setModalAddFinanceIsOpen}
-          yearAndMonth={formattedYearAndMonth}
           setPage={setPage}
         />
 
-        <LocalizationProvider adapterLocale={ptBR} dateAdapter={AdapterDateFns}>
-          <DatePicker
-            sx={{ marginRight: 'auto' }}
-            slotProps={{ textField: { placeholder: '' } }}
-            views={['month', 'year']}
-            label="Mês e Ano"
-            value={defaultDate}
-            onAccept={(value) => value && setDefaultDate(value)}
-          />
-        </LocalizationProvider>
+        <s.FiltersFormContainer onSubmit={handleSubmit(onSubmit)}>
+          <s.InputsFormContainer>
+            <LocalizationProvider adapterLocale={ptBR} dateAdapter={AdapterDateFns}>
+              <Controller
+                name="date"
+                control={control}
+                defaultValue={new Date()}
+                render={({ field }) => (
+                  <DatePicker
+                    {...field}
+                    views={['month', 'year']}
+                    label="Mês e Ano"
+                    onChange={(value) => {
+                      field.onChange(value);
+                    }}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                      },
+                    }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
+
+            <Input
+              name="description"
+              label="Descrição"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              control={control}
+            />
+          </s.InputsFormContainer>
+
+          <s.ButtonsFormContainer>
+            <CustomButton type="submit" text="Filtrar" />
+
+            <CustomButton
+              text="Nova transação"
+              onClick={() => setModalAddFinanceIsOpen(true)}
+            />
+          </s.ButtonsFormContainer>
+        </s.FiltersFormContainer>
 
         <FinancesTable
           rows={finances}
           page={page}
           setPage={setPage}
-          isLoadingValues={isLoadingValues}
-          yearAndMonth={formattedYearAndMonth}
         />
       </s.ElementsContainer>
     </s.Container>

@@ -15,6 +15,7 @@ interface IBaseModal {
   isOpen: boolean;
   onClose: () => void;
 }
+
 export const BaseModal = ({
   width,
   maxWidth,
