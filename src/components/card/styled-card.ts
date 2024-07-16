@@ -5,7 +5,7 @@ import { colors } from '../../styles/theme';
 export const Container = styled.div`
   flex: 1;
   min-width: 10%;
-  height: 150px;
+  height: 180px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -25,7 +25,7 @@ export const TitleContainer = styled.div`
   #title {
     color: ${colors.grey100};
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
   }
 
   #icon {
