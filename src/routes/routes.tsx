@@ -5,10 +5,10 @@ import { Fallback } from '-components/index';
 import { ROUTE_PATHS } from '-src/constants';
 import { useAuth } from '-src/hooks';
 
-import PrivateRoutes from './private-routes';
-import PublicRoutes from './public-routes';
+import { PrivateRoutes } from './private-routes';
+import { PublicRoutes } from './public-routes';
 
-const Home = lazy(() =>
+export const Home = lazy(() =>
   import('-src/pages').then((module) => ({ default: module.Home }))
 );
 
@@ -24,7 +24,7 @@ const NotFound = lazy(() =>
   import('-src/pages').then((module) => ({ default: module.NotFound }))
 );
 
-const Routes = () => {
+export const Routes = () => {
   const { isLoadingSign } = useAuth();
 
   if (isLoadingSign) return <Fallback />;
@@ -50,4 +50,3 @@ const Routes = () => {
   );
 };
 
-export default Routes;

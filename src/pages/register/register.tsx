@@ -46,7 +46,7 @@ const SignUpSchema = yup
   })
   .required();
 
-const Register = () => {
+export const Register = () => {
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
 
   const {
@@ -129,4 +129,3 @@ const Register = () => {
   );
 };
 
-export default Register;

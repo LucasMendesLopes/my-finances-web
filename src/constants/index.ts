@@ -1,1 +1,3 @@
-export { default as ROUTE_PATHS } from "./route-paths";
+import { ROUTE_PATHS } from './route-paths';
+
+export { ROUTE_PATHS };

@@ -4,7 +4,7 @@ import { RoutesLayout } from '-src/components';
 import { ROUTE_PATHS } from '-src/constants';
 import { useAuth } from '-src/hooks';
 
-const PrivateRoutes = () => {
+export const PrivateRoutes = () => {
   const { authenticated } = useAuth();
 
   return authenticated ? (
@@ -16,4 +16,3 @@ const PrivateRoutes = () => {
   );
 };
 
-export default PrivateRoutes;

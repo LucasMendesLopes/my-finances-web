@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 import {
@@ -21,7 +21,7 @@ interface FormData {
   description: string;
 }
 
-const Home = () => {
+export const Home = () => {
   const [modalAddFinanceIsOpen, setModalAddFinanceIsOpen] = useState(false);
   const [page, setPage] = useState(1);
 
@@ -123,5 +123,3 @@ const Home = () => {
     </s.Container>
   );
 };
-
-export default Home;

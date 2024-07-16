@@ -4,7 +4,7 @@ import { CustomButton } from '-src/components';
 
 import * as s from './styled-not-found';
 
-const NotFound = () => {
+export const NotFound = () => {
   const navigate = useNavigate();
 
   return (
@@ -27,4 +27,3 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;

@@ -26,7 +26,7 @@ const SignInSchema = yup
   })
   .required();
 
-const Login = () => {
+export const Login = () => {
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
   const { signIn } = useAuth();
 
@@ -87,4 +87,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+
