@@ -10,10 +10,11 @@ import {
 } from '-src/components/index';
 import { useAuth, useFinances } from '-src/hooks';
 import { formatDateToYearAndMonth } from '-src/utils';
+import { InputAdornment } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ptBR } from 'date-fns/locale';
-import { SignOut } from 'phosphor-react';
+import { SignOut, X } from 'phosphor-react';
 
 import * as s from './styled-home';
 interface FormData {
@@ -48,6 +49,13 @@ export const Home = () => {
 
     handleGetFinances(1, description, formatDateToYearAndMonth(dataFields.date));
   };
+
+  const handleClearFilterDescription = () => {
+    setDescription('')
+    setPage(1);
+
+    handleGetFinances(1, "", yearAndMonth);
+  }
 
   return (
     <s.Container>
@@ -101,6 +109,17 @@ export const Home = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               control={control}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end" sx={{ opacity: description ? 1 : 0, transition: "all 0.5s ease", pointerEvents: description ? "all" : "none" }}>
+                    <X
+                      style={{ cursor: 'pointer' }}
+                      size={20}
+                      onClick={handleClearFilterDescription}
+                    />
+                  </InputAdornment>
+                ),
+              }}
             />
           </s.InputsFormContainer>
 
