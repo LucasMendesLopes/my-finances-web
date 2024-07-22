@@ -1,11 +1,7 @@
-import { Dispatch, SetStateAction, useState } from 'react';
-import toast from 'react-hot-toast';
+import { useEffect, useState } from 'react';
 import ReactLoading from 'react-loading';
 
-import { useFinances } from '-src/hooks';
-import { deleteFinance } from '-src/services';
 import { colors } from '-src/styles/theme';
-import { IFinance } from '-src/types';
 import {
   Pagination,
   Table,
@@ -22,47 +18,28 @@ import {
   PencilSimple,
 } from 'phosphor-react';
 
-import { ModalEditFinance } from '../modal-edit-finance/modal-edit-finance';
 import {
   ButtonsContainer,
   EmptyTableText,
   TableElementsContainer,
-} from './styled-finances-table';
+} from './styled-categories-table';
 
-interface IFinancesTable {
-  rows: IFinance[] | [];
-  page: number;
-  setPage: Dispatch<SetStateAction<number>>;
-}
 
-export const FinancesTable = ({
-  rows,
-  page,
-  setPage,
-}: IFinancesTable) => {
-  const { handleGetFinances, totalPages, isLoadingValues, yearAndMonth, description, setDescription } = useFinances();
-  const [modalEditFinanceIsOpen, setModalEditFinanceIsOpen] = useState(false);
-  const [modalDefaultValues, setModalDefaultValues] = useState({
-    _id: '',
-    date: '',
-    description: '',
-    type: '',
-    value: '',
-  });
+export const CategoriesTable = () => {
+  const [isLoadingValues, setIsLoadingValues] = useState(false)
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setPage(value);
-    handleGetFinances(value, description, yearAndMonth);
-  };
+  useEffect(() => {
+    setIsLoadingValues(true)
+
+    setTimeout(() => {
+      setIsLoadingValues(false)
+    }, 500);
+  }, [])
 
   const columns = [
-    { id: 'date', label: 'Data', width: 170 },
-    { id: 'description', label: 'Descrição', width: 100 },
-    { id: 'value', label: 'Valor', width: 100 },
-    { id: 'type', label: 'Tipo', width: 100 },
+    { id: 'name', label: 'Nome', width: 200 },
+    { id: 'color', label: 'Cor', width: 200 },
+    { id: 'type', label: 'Tipo', width: 10 },
   ];
 
   const handleRenderIcon = (type: string) => {
@@ -72,43 +49,33 @@ export const FinancesTable = ({
       return <ArrowCircleDown color={colors.red} size={35} />;
   };
 
-  const handleDeleteFinance = async (id: string) => {
-    await deleteFinance(id)
-      .then((resp) => {
-        toast.success(resp);
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
 
-    setPage(1);
-    setDescription("")
-    handleGetFinances(1, "", yearAndMonth);
-  };
+  const rowsTest = [
+    { _id: "1", name: 'Salário', color: '#820263', type: 'entrada' },
+    { _id: "2", name: 'Fatura cartão', color: '#FB8B24', type: 'saida' },
+    { _id: "3", name: 'Lazer', color: '#04A777', type: 'saida' },
 
-  const handleRenderValue = (column: string, value: string, row: IFinance) => {
+  ]
+
+  const handleRenderValue = (column: string, value: string, row: any) => {
     if (column === 'type') {
       return (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           {handleRenderIcon(value)}
 
           <ButtonsContainer>
-            <button
-              onClick={() => {
-                setModalDefaultValues(row);
-                setModalEditFinanceIsOpen(true);
-              }}
-            >
+            <button>
               {<PencilSimple color={colors.grey200} size={30} />}
             </button>
 
-            <button onClick={() => handleDeleteFinance(row._id)}>
+            <button>
               {<Trash color={colors.grey200} size={30} />}
             </button>
           </ButtonsContainer>
         </div>
       );
-    } else if (column === 'value') return <span style={{ color: row.type === "saida" ? colors.red : colors.green }}>{row.type === "saida" && "- "}R$ ${value}</span>;
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    } else if (column === 'color') return <div style={{ width: "40px", height: "40px", backgroundColor: `${row.color}`, borderRadius: "25px" }} />;
 
     return value;
   };
@@ -123,7 +90,7 @@ export const FinancesTable = ({
           height={70}
         />
       );
-    else if (rows?.length > 0)
+    else if (rowsTest?.length > 0)
       return (
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">
@@ -141,7 +108,7 @@ export const FinancesTable = ({
             </TableHead>
 
             <TableBody>
-              {rows?.map((row) => {
+              {rowsTest?.map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                     {columns.map((column) => {
@@ -171,23 +138,12 @@ export const FinancesTable = ({
         {handleRenderTable()}
       </TableElementsContainer>
 
-      {Object.values(modalDefaultValues).some((value) => value !== '') && (
-        <ModalEditFinance
-          isOpen={modalEditFinanceIsOpen}
-          setIsOpen={setModalEditFinanceIsOpen}
-          setPage={setPage}
-          modalDefaultValues={modalDefaultValues}
-          setModalDefaultValues={setModalDefaultValues}
-        />
-      )}
-
-      {rows?.length > 0 && (
+      {rowsTest?.length > 0 && (
         <Pagination
           sx={{ margin: '0 auto' }}
-          count={totalPages}
-          page={page}
-          onChange={handlePageChange}
-          disabled={totalPages === 1}
+          count={1}
+          page={1}
+          disabled={true}
         />
       )}
     </>

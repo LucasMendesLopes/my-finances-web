@@ -35,7 +35,7 @@ export const BaseModal = ({
       <Fade in={isOpen}>
         <s.ElementsContainer width={width} maxWidth={maxWidth}>
           <s.TitleContainer>
-            <Typography variant="h5" component="h5" color={colors.grey200}>
+            <Typography variant="h2" component="h2" color={colors.grey200}>
               {title}
             </Typography>
 

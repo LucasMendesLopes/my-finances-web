@@ -50,7 +50,7 @@ export const theme = createTheme({
   },
   typography: {
     fontFamily: ['Work sans', 'sans-serif'].join(','),
-    h5: {
+    h2: {
       fontWeight: 600,
       fontSize: '1.5rem',
       lineHeight: '2rem',
@@ -63,7 +63,7 @@ export const theme = createTheme({
     },
     'button-text': {
       fontSize: '1rem',
-      fontWeight: 500,
+      fontWeight: 600,
       lineHeight: '1.625rem',
       letterSpacing: '.029rem',
     },

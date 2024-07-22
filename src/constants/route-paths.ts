@@ -1,5 +1,6 @@
 export const ROUTE_PATHS = {
-  home: '/',
+  finances: '/',
+  categories: '/categorias',
   login: '/login',
   register: '/register',
 };

@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
-import { RoutesLayout } from '-src/components';
+import { MainLayout } from '-src/components';
 import { ROUTE_PATHS } from '-src/constants';
 import { useAuth } from '-src/hooks';
 
@@ -8,9 +8,9 @@ export const PrivateRoutes = () => {
   const { authenticated } = useAuth();
 
   return authenticated ? (
-    <RoutesLayout>
+    <MainLayout>
       <Outlet />
-    </RoutesLayout>
+    </MainLayout>
   ) : (
     <Navigate to={ROUTE_PATHS.login} />
   );

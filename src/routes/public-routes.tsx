@@ -8,7 +8,7 @@ export const PublicRoutes = () => {
   const { authenticated } = useAuth();
 
   return authenticated ? (
-    <Navigate to={ROUTE_PATHS.home} />
+    <Navigate to={ROUTE_PATHS.finances} />
   ) : (
     <RoutesLayout>
       <Outlet />

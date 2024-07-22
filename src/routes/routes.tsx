@@ -8,8 +8,12 @@ import { useAuth } from '-src/hooks';
 import { PrivateRoutes } from './private-routes';
 import { PublicRoutes } from './public-routes';
 
-export const Home = lazy(() =>
-  import('-src/pages').then((module) => ({ default: module.Home }))
+const Finances = lazy(() =>
+  import('-src/pages').then((module) => ({ default: module.Finances }))
+);
+
+const Categories = lazy(() =>
+  import('-src/pages').then((module) => ({ default: module.Categories }))
 );
 
 const Login = lazy(() =>
@@ -34,7 +38,8 @@ export const Routes = () => {
       <Switch>
         {/* PRIVATE */}
         <Route element={<PrivateRoutes />}>
-          <Route path={ROUTE_PATHS.home} element={<Home />} />
+          <Route path={ROUTE_PATHS.finances} element={<Finances />} />
+          <Route path={ROUTE_PATHS.categories} element={<Categories />} />
         </Route>
 
         {/* PUBLIC */}
@@ -49,4 +54,3 @@ export const Routes = () => {
     </Suspense>
   );
 };
-
