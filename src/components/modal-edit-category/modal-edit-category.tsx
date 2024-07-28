@@ -130,7 +130,7 @@ export const ModalEditCategory = ({
     <BaseModal
       width="33.5rem"
       maxWidth="90%"
-      title="Editar transação"
+      title="Editar categoria"
       isOpen={isOpen}
       onClose={() => !isLoadingEditCategory && handleClose()}
     >
