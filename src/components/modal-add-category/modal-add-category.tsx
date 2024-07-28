@@ -2,11 +2,10 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { CustomButton, DateInput, Input } from '-components/index';
-import { useAuth, useFinances } from '-src/hooks';
-import { addFinance } from '-src/services/finance.service';
-import { maskCurrency } from '-src/utils';
-import { yupGeneralSchema } from '-src/utils/yup';
+import { CustomButton, Input } from '-components/index';
+import { useAuth, useCategories } from '-src/hooks';
+import { addCategory } from '-src/services';
+import { noWhiteSpaceRegex, requiredFieldMessage, whiteSpaceText } from '-src/utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import * as yup from 'yup';
@@ -14,71 +13,70 @@ import * as yup from 'yup';
 import { BaseModal } from '../base-modal/base-modal';
 import * as s from './styles';
 
-interface IFinanceFormValues {
-  date: Date;
-  description: string;
-  value: string;
+interface ICategoryFormValues {
+  name: string;
+  color: string;
 }
 
-interface IModalAddFinance {
+interface IModalAddCategory {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   setPage: Dispatch<SetStateAction<number>>;
 }
 
-const addFinanceSchema = yup
+const addCategorySchema = yup
   .object({
-    date: yupGeneralSchema.date,
-    description: yupGeneralSchema.description,
-    value: yupGeneralSchema.value,
+    name: yup
+      .string()
+      .required(requiredFieldMessage)
+      .matches(noWhiteSpaceRegex, whiteSpaceText),
+    color: yup
+      .string()
+      .required(requiredFieldMessage)
   })
   .required();
 
-export const ModalAddFinance = ({
+export const ModalAddCategory = ({
   isOpen,
   setIsOpen,
   setPage,
-}: IModalAddFinance) => {
+}: IModalAddCategory) => {
   const [isEntrada, setIsEntrada] = useState(true);
   const [isSaida, setIsSaida] = useState(false);
-  const [isLoadingAddFinance, setIsLoadingAddFinance] = useState(false);
+  const [isLoadingAddCategory, setIsLoadingAddCategory] = useState(false);
 
   const { userId } = useAuth();
-  const { handleGetFinances, yearAndMonth, setDescription } = useFinances();
+
+  const { handleGetCategories } = useCategories();
 
   const {
     handleSubmit,
     control,
     formState: { errors },
     reset,
-  } = useForm<IFinanceFormValues>({
-    resolver: yupResolver(addFinanceSchema),
+  } = useForm<ICategoryFormValues>({
+    resolver: yupResolver(addCategorySchema),
   });
 
   const clearInputs = () => {
     reset({});
   };
 
-  const onSubmit = async (dataFields: IFinanceFormValues) => {
-    setIsLoadingAddFinance(true);
+  const onSubmit = async (dataFields: ICategoryFormValues) => {
+    setIsLoadingAddCategory(true);
 
-    const { date, description, value } = dataFields;
+    const { name, color } = dataFields;
 
-    const financeType = isEntrada ? 'entrada' : 'saida';
-
-    const normalizedValue = value.replace(/\./g, '').replace(',', '.');
-
-    const formatedValue = parseFloat(normalizedValue);
+    const categoryType = isEntrada ? 'entrada' : 'saida';
 
     const body = {
-      date,
-      description,
-      type: financeType,
-      value: formatedValue,
+      name,
+      color,
+      type: categoryType,
       userId,
     };
 
-    await addFinance(body)
+    await addCategory(body)
       .then((resp) => {
         toast.success(resp);
       })
@@ -86,14 +84,13 @@ export const ModalAddFinance = ({
         toast.error(error);
       })
       .finally(() => {
-        setIsLoadingAddFinance(false);
+        setIsLoadingAddCategory(false);
         setIsOpen(false);
         clearInputs();
       });
 
     setPage(1);
-    setDescription("")
-    handleGetFinances(1, "", yearAndMonth);
+    handleGetCategories(1);
   };
 
   const handleCheckbox = () => {
@@ -115,34 +112,29 @@ export const ModalAddFinance = ({
     <BaseModal
       width="33.5rem"
       maxWidth="90%"
-      title="Cadastrar transação"
+      title="Cadastrar categoria"
       isOpen={isOpen}
-      onClose={() => !isLoadingAddFinance && handleClose()}
+      onClose={() => !isLoadingAddCategory && handleClose()}
     >
       <s.Form onSubmit={handleSubmit(onSubmit)}>
         <s.InputsContainer>
-          <DateInput
-            name="date"
-            label="Escolha a data"
-            control={control}
-            errorMessage={errors.date?.message}
-            fullwidth
-          />
+          <div style={{ display: "flex", gap: '1rem' }}>
+            <Input
+              name="name"
+              label="Nome"
+              control={control}
+              errorMessage={errors.name?.message}
+            />
 
-          <Input
-            name="description"
-            label="Descrição"
-            control={control}
-            errorMessage={errors.description?.message}
-          />
-
-          <Input
-            name="value"
-            label="Valor"
-            errorMessage={errors.value?.message}
-            control={control}
-            mask={maskCurrency}
-          />
+            <Input
+              name="color"
+              defaultValue="#000000"
+              type='color'
+              control={control}
+              errorMessage={errors.color?.message}
+              sx={{ width: "20%" }}
+            />
+          </div>
 
           <div>
             <FormControlLabel
@@ -164,13 +156,13 @@ export const ModalAddFinance = ({
           <CustomButton
             text="Cancelar"
             variant="outlined"
-            disabled={isLoadingAddFinance}
+            disabled={isLoadingAddCategory}
             onClick={handleClose}
           />
 
           <CustomButton
             text="Cadastrar"
-            isLoading={isLoadingAddFinance}
+            isLoading={isLoadingAddCategory}
             type="submit"
           />
         </s.ButtonsContainer>

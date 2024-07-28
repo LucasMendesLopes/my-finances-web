@@ -47,3 +47,10 @@ export const ButtonsContainer = styled.div`
     transform: translateX(0);
   }
 `;
+
+export const CategoryCircle = styled.div<{ color: string }>`
+  width: 40px;
+  height: 40px;
+  background-color: ${({ color }) => color};
+  border-radius: 25px;
+`;

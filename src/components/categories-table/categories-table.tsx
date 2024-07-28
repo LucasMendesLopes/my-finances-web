@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+import toast from 'react-hot-toast';
 import ReactLoading from 'react-loading';
 
+import { useCategories } from '-src/hooks';
+import { deleteCategory } from '-src/services';
 import { colors } from '-src/styles/theme';
+import { ICategory } from '-src/types';
 import {
   Pagination,
   Table,
@@ -18,23 +22,39 @@ import {
   PencilSimple,
 } from 'phosphor-react';
 
+import { ModalEditCategory } from '../modal-edit-category/modal-edit-category';
 import {
   ButtonsContainer,
+  CategoryCircle,
   EmptyTableText,
   TableElementsContainer,
 } from './styled-categories-table';
+interface ICategoriesTable {
+  rows: ICategory[] | [];
+  page: number;
+  setPage: Dispatch<SetStateAction<number>>;
+}
 
+export const CategoriesTable = ({ rows,
+  page,
+  setPage, }: ICategoriesTable) => {
+  const [modalEditCategoryIsOpen, setModalEditCategoryIsOpen] = useState(false);
+  const [modalDefaultValues, setModalDefaultValues] = useState({
+    _id: '',
+    name: '',
+    color: '',
+    type: '',
+  });
 
-export const CategoriesTable = () => {
-  const [isLoadingValues, setIsLoadingValues] = useState(false)
+  const { handleGetCategories, totalPages, isLoadingGetCategories } = useCategories();
 
-  useEffect(() => {
-    setIsLoadingValues(true)
-
-    setTimeout(() => {
-      setIsLoadingValues(false)
-    }, 500);
-  }, [])
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+    handleGetCategories(value);
+  };
 
   const columns = [
     { id: 'name', label: 'Nome', width: 200 },
@@ -49,39 +69,49 @@ export const CategoriesTable = () => {
       return <ArrowCircleDown color={colors.red} size={35} />;
   };
 
+  const handleDeleteCategory = async (id: string) => {
+    await deleteCategory(id)
+      .then((resp) => {
+        toast.success(resp);
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
 
-  const rowsTest = [
-    { _id: "1", name: 'Salário', color: '#820263', type: 'entrada' },
-    { _id: "2", name: 'Fatura cartão', color: '#FB8B24', type: 'saida' },
-    { _id: "3", name: 'Lazer', color: '#04A777', type: 'saida' },
+    setPage(1);
+    handleGetCategories(1);
+  };
 
-  ]
-
-  const handleRenderValue = (column: string, value: string, row: any) => {
+  const handleRenderValue = (column: string, value: string, row: ICategory) => {
     if (column === 'type') {
       return (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           {handleRenderIcon(value)}
 
           <ButtonsContainer>
-            <button>
+            <button
+              onClick={() => {
+                setModalDefaultValues(row);
+                setModalEditCategoryIsOpen(true);
+              }}
+            >
               {<PencilSimple color={colors.grey200} size={30} />}
             </button>
 
             <button>
-              {<Trash color={colors.grey200} size={30} />}
+              {<Trash color={colors.grey200} size={30} onClick={() => handleDeleteCategory(row._id)} />}
             </button>
           </ButtonsContainer>
         </div>
       );
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    } else if (column === 'color') return <div style={{ width: "40px", height: "40px", backgroundColor: `${row.color}`, borderRadius: "25px" }} />;
+    } else if (column === 'color') return <CategoryCircle color={row.color} />;
 
     return value;
   };
 
   const handleRenderTable = () => {
-    if (isLoadingValues)
+    if (isLoadingGetCategories)
       return (
         <ReactLoading
           type="bubbles"
@@ -90,7 +120,7 @@ export const CategoriesTable = () => {
           height={70}
         />
       );
-    else if (rowsTest?.length > 0)
+    else if (rows?.length > 0)
       return (
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">
@@ -108,7 +138,7 @@ export const CategoriesTable = () => {
             </TableHead>
 
             <TableBody>
-              {rowsTest?.map((row) => {
+              {rows?.map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                     {columns.map((column) => {
@@ -126,7 +156,7 @@ export const CategoriesTable = () => {
           </Table>
         </TableContainer>
       );
-    else if (!isLoadingValues)
+    else if (!isLoadingGetCategories)
       return (
         <EmptyTableText>Não há dados para serem mostrados.</EmptyTableText>
       );
@@ -134,16 +164,27 @@ export const CategoriesTable = () => {
 
   return (
     <>
-      <TableElementsContainer isLoadingValues={isLoadingValues}>
+      <TableElementsContainer isLoadingValues={isLoadingGetCategories}>
         {handleRenderTable()}
       </TableElementsContainer>
 
-      {rowsTest?.length > 0 && (
+      {Object.values(modalDefaultValues).some((value) => value !== '') && (
+        <ModalEditCategory
+          isOpen={modalEditCategoryIsOpen}
+          setIsOpen={setModalEditCategoryIsOpen}
+          setPage={setPage}
+          modalDefaultValues={modalDefaultValues}
+          setModalDefaultValues={setModalDefaultValues}
+        />
+      )}
+
+      {rows?.length > 0 && (
         <Pagination
           sx={{ margin: '0 auto' }}
-          count={1}
-          page={1}
-          disabled={true}
+          count={totalPages}
+          page={page}
+          onChange={handlePageChange}
+          disabled={totalPages === 1}
         />
       )}
     </>

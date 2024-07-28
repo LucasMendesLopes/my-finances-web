@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 export const whiteSpaceText = 'Espaços em branco não são permitidos.';
-const requiredFieldMessage = 'Campo obrigatório*';
+export const requiredFieldMessage = 'Campo obrigatório*';
 export const noWhiteSpaceRegex = /^(?!\s).+(?<!\s)$/gm;
 
 export const yupGeneralSchema = {
