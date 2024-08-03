@@ -13,7 +13,7 @@ interface IAddCategoryBody {
   userId: string;
 }
 
-interface IEditCategoryBody extends Omit<IAddCategoryBody, 'userId'> {
+interface IEditCategoryBody extends IAddCategoryBody {
   categoryId: string;
 }
 
@@ -54,11 +54,11 @@ const addCategory = (body: IAddCategoryBody): Promise<string> => {
 };
 
 const editCategory = (body: IEditCategoryBody): Promise<string> => {
-  const { name, color, type, categoryId } = body;
+  const { name, color, type, categoryId, userId } = body;
 
   return new Promise((resolve, reject) => {
     api
-      .put(`/categories/${categoryId}`, { name, color, type })
+      .put(`/categories/${categoryId}`, { name, color, type, userId })
       .then((resp) => {
         return resolve(resp.data.message);
       })

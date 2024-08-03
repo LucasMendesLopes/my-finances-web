@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { CustomButton, Input } from '-components/index';
-import { useCategories } from '-src/hooks';
+import { useAuth, useCategories } from '-src/hooks';
 import { editCategory } from '-src/services';
 import { ICategory } from '-src/types';
 import { noWhiteSpaceRegex, requiredFieldMessage, whiteSpaceText } from '-src/utils/yup';
@@ -54,6 +54,7 @@ export const ModalEditCategory = ({
   const [isLoadingEditCategory, setIsLoadingEditCategory] = useState(false);
 
   const { handleGetCategories } = useCategories();
+  const { userId } = useAuth();
 
 
   const {
@@ -83,13 +84,12 @@ export const ModalEditCategory = ({
 
     const categoryType = isEntrada ? 'entrada' : 'saida';
 
-
-
     const body = {
       name,
       color,
       type: categoryType,
       categoryId: modalDefaultValues?._id,
+      userId
     };
 
     await editCategory(body)
