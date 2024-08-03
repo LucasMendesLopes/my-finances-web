@@ -6,7 +6,7 @@ interface CategoriesContextType {
   isLoadingGetCategories: boolean;
   categories: ICategory[];
   totalPages: number;
-  handleGetCategories: (page: number) => void;
+  handleGetCategories: (page?: number) => void;
 }
 
 export const CategoriesContext = createContext<CategoriesContextType>({

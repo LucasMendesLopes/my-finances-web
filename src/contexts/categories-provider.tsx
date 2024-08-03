@@ -14,7 +14,7 @@ export const CategoriesProvider = ({ children }: { children: JSX.Element }) => {
 
   const { userId } = useAuth();
 
-  const handleGetCategories = (page: number) => {
+  const handleGetCategories = (page?: number) => {
     setIsLoadingGetCategories(true);
 
     getCategories(userId, page)

@@ -1,12 +1,12 @@
 import { api } from '-src/api/api';
-import { IFinance } from '-src/types';
+import { ICategory, IFinance } from '-src/types';
 
 interface IAddFinanceBody {
   date: Date;
   description: string;
-  type: string;
   value: number;
   userId: string;
+  category: ICategory;
 }
 
 interface IEditFinanceBody extends Omit<IAddFinanceBody, 'userId'> {
@@ -42,11 +42,11 @@ const getFinances = (
 };
 
 const addFinance = (body: IAddFinanceBody): Promise<string> => {
-  const { date, description, type, value, userId } = body;
+  const { date, description, value, category, userId } = body;
 
   return new Promise((resolve, reject) => {
     api
-      .post('/finances', { date, description, type, value, userId })
+      .post('/finances', { date, description, value, category, userId })
       .then((resp) => {
         return resolve(resp.data.message);
       })
@@ -57,11 +57,11 @@ const addFinance = (body: IAddFinanceBody): Promise<string> => {
 };
 
 const editFinance = (body: IEditFinanceBody): Promise<string> => {
-  const { date, description, type, value, financeId } = body;
+  const { date, description, value, category, financeId } = body;
 
   return new Promise((resolve, reject) => {
     api
-      .put(`/finances/${financeId}`, { date, description, type, value })
+      .put(`/finances/${financeId}`, { date, description, value, category })
       .then((resp) => {
         return resolve(resp.data.message);
       })

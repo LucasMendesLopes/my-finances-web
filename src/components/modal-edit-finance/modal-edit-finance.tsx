@@ -3,25 +3,30 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { CustomButton, DateInput, Input } from '-components/index';
-import { useFinances } from '-src/hooks';
+import { useCategories, useFinances } from '-src/hooks';
 import { editFinance } from '-src/services/finance.service';
-import { IFinance } from '-src/types';
 import { maskCurrency } from '-src/utils';
-import { yupGeneralSchema } from '-src/utils/yup';
+import { requiredFieldMessage, yupGeneralSchema } from '-src/utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Checkbox, FormControlLabel } from '@mui/material';
 import * as yup from 'yup';
 
 import { BaseModal } from '../base-modal/base-modal';
+import { InputSelect } from '../input-select/input-select';
 import * as s from './styles';
 
 interface IFinanceFormValues {
   date: Date;
   description: string;
   value: string;
+  category: string
 }
-
-interface IDefaultValues extends Omit<IFinance, 'userId'> { }
+interface IDefaultValues {
+  _id: string;
+  date: string;
+  description: string;
+  value: string;
+  category: string;
+}
 
 interface IModalEditFinance {
   isOpen: boolean;
@@ -36,6 +41,7 @@ const addFinanceSchema = yup
     date: yupGeneralSchema.date,
     description: yupGeneralSchema.description,
     value: yupGeneralSchema.value,
+    category: yup.string().required(requiredFieldMessage),
   })
   .required();
 
@@ -46,13 +52,15 @@ export const ModalEditFinance = ({
   modalDefaultValues,
   setModalDefaultValues,
 }: IModalEditFinance) => {
-  const [isEntrada, setIsEntrada] = useState(
-    modalDefaultValues.type === 'entrada'
-  );
-  const [isSaida, setIsSaida] = useState(modalDefaultValues.type === 'saida');
   const [isLoadingEditFinance, setIsLoadingEditFinance] = useState(false);
 
   const { handleGetFinances, yearAndMonth, setDescription } = useFinances();
+  const { categories } = useCategories();
+
+  const categoryOptions = categories.map(category => ({
+    label: category.name,
+    value: category._id
+  }));
 
   const separateDate = modalDefaultValues.date.split('/');
   const formatedDate = `${separateDate[2]}, ${separateDate[1]}, ${separateDate[0]}`;
@@ -68,6 +76,7 @@ export const ModalEditFinance = ({
       date: new Date(formatedDate),
       description: modalDefaultValues.description,
       value: modalDefaultValues.value,
+      category: modalDefaultValues.category
     },
     shouldUnregister: true,
   });
@@ -81,9 +90,9 @@ export const ModalEditFinance = ({
     clearInputs();
     setIsLoadingEditFinance(true);
 
-    const { date, description, value } = dataFields;
+    const { date, description, value, category } = dataFields;
 
-    const financeType = isEntrada ? 'entrada' : 'saida';
+    const selectedCategory = categories.find(cat => cat._id === category);
 
     const normalizedValue = value.replace(/\./g, '').replace(',', '.');
 
@@ -92,9 +101,9 @@ export const ModalEditFinance = ({
     const body = {
       date,
       description,
-      type: financeType,
       value: formatedValue,
       financeId: modalDefaultValues?._id,
+      category: selectedCategory
     };
 
     await editFinance(body)
@@ -115,20 +124,8 @@ export const ModalEditFinance = ({
     handleGetFinances(1, "", yearAndMonth);
   };
 
-  const handleCheckbox = (checkboxType: string) => {
-    if (checkboxType === 'entrada') {
-      setIsEntrada(true);
-      setIsSaida(false);
-    } else {
-      setIsEntrada(false);
-      setIsSaida(true);
-    }
-  };
-
   const handleClose = () => {
     clearInputs();
-    setIsEntrada((prev) => prev);
-    setIsSaida((prev) => prev);
     setIsOpen(false);
   };
 
@@ -165,29 +162,14 @@ export const ModalEditFinance = ({
             mask={maskCurrency}
           />
 
-          <div>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isEntrada}
-                  onChange={() => handleCheckbox('entrada')}
-                  value="entrada"
-                />
-              }
-              label="entrada"
-            />
-
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isSaida}
-                  onChange={() => handleCheckbox('saida')}
-                  value="saida"
-                />
-              }
-              label="saída"
-            />
-          </div>
+          <InputSelect
+            name="category"
+            control={control}
+            defaultValue=""
+            label="Categoria"
+            options={categoryOptions}
+            errorMessage={errors.category?.message}
+          />
         </s.InputsContainer>
 
         <s.ButtonsContainer>

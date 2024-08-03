@@ -3,21 +3,22 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { CustomButton, DateInput, Input } from '-components/index';
-import { useAuth, useFinances } from '-src/hooks';
+import { useAuth, useCategories, useFinances } from '-src/hooks';
 import { addFinance } from '-src/services/finance.service';
 import { maskCurrency } from '-src/utils';
-import { yupGeneralSchema } from '-src/utils/yup';
+import { requiredFieldMessage, yupGeneralSchema } from '-src/utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Checkbox, FormControlLabel } from '@mui/material';
 import * as yup from 'yup';
 
 import { BaseModal } from '../base-modal/base-modal';
+import { InputSelect } from '../input-select/input-select';
 import * as s from './styles';
 
 interface IFinanceFormValues {
   date: Date;
   description: string;
   value: string;
+  category: string
 }
 
 interface IModalAddFinance {
@@ -31,6 +32,7 @@ const addFinanceSchema = yup
     date: yupGeneralSchema.date,
     description: yupGeneralSchema.description,
     value: yupGeneralSchema.value,
+    category: yup.string().required(requiredFieldMessage),
   })
   .required();
 
@@ -39,12 +41,11 @@ export const ModalAddFinance = ({
   setIsOpen,
   setPage,
 }: IModalAddFinance) => {
-  const [isEntrada, setIsEntrada] = useState(true);
-  const [isSaida, setIsSaida] = useState(false);
   const [isLoadingAddFinance, setIsLoadingAddFinance] = useState(false);
 
   const { userId } = useAuth();
   const { handleGetFinances, yearAndMonth, setDescription } = useFinances();
+  const { categories } = useCategories();
 
   const {
     handleSubmit,
@@ -62,9 +63,9 @@ export const ModalAddFinance = ({
   const onSubmit = async (dataFields: IFinanceFormValues) => {
     setIsLoadingAddFinance(true);
 
-    const { date, description, value } = dataFields;
+    const { date, description, value, category } = dataFields;
 
-    const financeType = isEntrada ? 'entrada' : 'saida';
+    const selectedCategory = categories.find(cat => cat._id === category);
 
     const normalizedValue = value.replace(/\./g, '').replace(',', '.');
 
@@ -73,8 +74,8 @@ export const ModalAddFinance = ({
     const body = {
       date,
       description,
-      type: financeType,
       value: formatedValue,
+      category: selectedCategory,
       userId,
     };
 
@@ -96,20 +97,15 @@ export const ModalAddFinance = ({
     handleGetFinances(1, "", yearAndMonth);
   };
 
-  const handleCheckbox = () => {
-    if (isEntrada) {
-      setIsEntrada(false);
-      setIsSaida(true);
-    } else {
-      setIsEntrada(true);
-      setIsSaida(false);
-    }
-  };
-
   const handleClose = () => {
     setIsOpen(false);
     clearInputs();
   };
+
+  const categoryOptions = categories.map(category => ({
+    label: category.name,
+    value: category._id
+  }));
 
   return (
     <BaseModal
@@ -144,20 +140,14 @@ export const ModalAddFinance = ({
             mask={maskCurrency}
           />
 
-          <div>
-            <FormControlLabel
-              color="red"
-              control={
-                <Checkbox checked={isEntrada} onChange={handleCheckbox} />
-              }
-              label="entrada"
-            />
-
-            <FormControlLabel
-              control={<Checkbox checked={isSaida} onChange={handleCheckbox} />}
-              label="saída"
-            />
-          </div>
+          <InputSelect
+            name="category"
+            control={control}
+            defaultValue=""
+            label="Categoria"
+            options={categoryOptions}
+            errorMessage={errors.category?.message}
+          />
         </s.InputsContainer>
 
         <s.ButtonsContainer>

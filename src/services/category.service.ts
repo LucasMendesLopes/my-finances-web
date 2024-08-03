@@ -19,11 +19,16 @@ interface IEditCategoryBody extends Omit<IAddCategoryBody, 'userId'> {
 
 const getCategories = (
   userId: string,
-  page: number
+  page?: number
 ): Promise<ICategoryResp> => {
   return new Promise((resolve, reject) => {
+    const url =
+      page !== undefined
+        ? `/categories/${userId}?page=${page}`
+        : `/categories/${userId}`;
+
     api
-      .get(`/categories/${userId}?page=${page}`)
+      .get(url)
       .then((resp) => {
         return resolve(resp.data);
       })

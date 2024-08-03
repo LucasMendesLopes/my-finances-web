@@ -8,7 +8,7 @@ import {
   ModalAddFinance,
   ValueCards,
 } from '-src/components/index';
-import { useFinances } from '-src/hooks';
+import { useCategories, useFinances } from '-src/hooks';
 import { formatDateToYearAndMonth } from '-src/utils';
 import { InputAdornment } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -38,8 +38,13 @@ export const Finances = () => {
     setDescription
   } = useFinances();
 
+  const {
+    handleGetCategories
+  } = useCategories();
+
   useEffect(() => {
     handleGetFinances(page, "", yearAndMonth);
+    handleGetCategories()
   }, []);
 
   const onSubmit = async (dataFields: FormData) => {
@@ -57,7 +62,6 @@ export const Finances = () => {
   }
 
   return (
-    // <s.Container>
     <s.Container>
       <ValueCards />
 
@@ -128,6 +132,5 @@ export const Finances = () => {
         setPage={setPage}
       />
     </s.Container>
-    // </s.Container>
   );
 };

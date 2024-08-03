@@ -7,6 +7,7 @@ import { deleteFinance } from '-src/services';
 import { colors } from '-src/styles/theme';
 import { IFinance } from '-src/types';
 import {
+  Chip,
   Pagination,
   Table,
   TableBody,
@@ -16,8 +17,6 @@ import {
   TableRow,
 } from '@mui/material';
 import {
-  ArrowCircleDown,
-  ArrowCircleUp,
   Trash,
   PencilSimple,
 } from 'phosphor-react';
@@ -46,8 +45,8 @@ export const FinancesTable = ({
     _id: '',
     date: '',
     description: '',
-    type: '',
     value: '',
+    category: '',
   });
 
   const handlePageChange = (
@@ -62,15 +61,9 @@ export const FinancesTable = ({
     { id: 'date', label: 'Data', width: 170 },
     { id: 'description', label: 'Descrição', width: 100 },
     { id: 'value', label: 'Valor', width: 100 },
-    { id: 'type', label: 'Tipo', width: 100 },
+    { id: 'category', label: 'Categoria', width: 100 },
   ];
 
-  const handleRenderIcon = (type: string) => {
-    if (type === 'entrada')
-      return <ArrowCircleUp color={colors.green} size={35} />;
-    else if (type === 'saida')
-      return <ArrowCircleDown color={colors.red} size={35} />;
-  };
 
   const handleDeleteFinance = async (id: string) => {
     await deleteFinance(id)
@@ -87,15 +80,21 @@ export const FinancesTable = ({
   };
 
   const handleRenderValue = (column: string, value: string, row: IFinance) => {
-    if (column === 'type') {
+    if (column === 'category') {
       return (
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {handleRenderIcon(value)}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Chip label={row.category.name} sx={{ backgroundColor: row.category.color, color: "white", fontSize: '1rem', fontWeight: 'bold' }} />
 
           <ButtonsContainer>
             <button
               onClick={() => {
-                setModalDefaultValues(row);
+                setModalDefaultValues({
+                  _id: row._id,
+                  date: row.date,
+                  description: row.description,
+                  value: row.value,
+                  category: row.category._id
+                });
                 setModalEditFinanceIsOpen(true);
               }}
             >
@@ -108,7 +107,7 @@ export const FinancesTable = ({
           </ButtonsContainer>
         </div>
       );
-    } else if (column === 'value') return <span style={{ color: row.type === "saida" ? colors.red : colors.green }}>{row.type === "saida" && "- "}R$ ${value}</span>;
+    } else if (column === 'value') return <span style={{ color: row.category.type === "saida" ? colors.red : colors.green }}>{row.category.type === "saida" && "- "}R$ ${value}</span>;
 
     return value;
   };
