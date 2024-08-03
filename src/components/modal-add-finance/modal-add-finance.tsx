@@ -65,7 +65,7 @@ export const ModalAddFinance = ({
 
     const { date, description, value, category } = dataFields;
 
-    const selectedCategory = categories.find(cat => cat._id === category);
+    const selectedCategory = categories.find(cat => cat._id === category)!;
 
     const normalizedValue = value.replace(/\./g, '').replace(',', '.');
 
