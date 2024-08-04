@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { CustomButton, Input } from '-components/index';
-import { useAuth, useCategories } from '-src/hooks';
+import { useAuth, useCategories, useFinances } from '-src/hooks';
 import { editCategory } from '-src/services';
 import { ICategory } from '-src/types';
 import { noWhiteSpaceRegex, requiredFieldMessage, whiteSpaceText } from '-src/utils/yup';
@@ -54,6 +54,7 @@ export const ModalEditCategory = ({
   const [isLoadingEditCategory, setIsLoadingEditCategory] = useState(false);
 
   const { handleGetCategories } = useCategories();
+  const { handleGetFinances, yearAndMonth } = useFinances();
   const { userId } = useAuth();
 
 
@@ -77,7 +78,6 @@ export const ModalEditCategory = ({
   };
 
   const onSubmit = async (dataFields: ICategoryFormValues) => {
-    clearInputs();
     setIsLoadingEditCategory(true);
 
     const { name, color } = dataFields;
@@ -107,6 +107,7 @@ export const ModalEditCategory = ({
 
     setPage(1);
     handleGetCategories(1);
+    handleGetFinances(1, "", yearAndMonth)
   };
 
   const handleCheckbox = (checkboxType: string) => {

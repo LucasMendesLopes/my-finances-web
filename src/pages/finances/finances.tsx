@@ -43,7 +43,9 @@ export const Finances = () => {
   } = useCategories();
 
   useEffect(() => {
-    handleGetFinances(page, "", yearAndMonth);
+    if (finances.length === 0) {
+      handleGetFinances(page, "", yearAndMonth);
+    }
     handleGetCategories()
   }, []);
 

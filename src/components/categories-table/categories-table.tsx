@@ -73,13 +73,13 @@ export const CategoriesTable = ({ rows,
     await deleteCategory(id)
       .then((resp) => {
         toast.success(resp);
+
+        setPage(1);
+        handleGetCategories(1);
       })
       .catch((error) => {
         toast.error(error);
       });
-
-    setPage(1);
-    handleGetCategories(1);
   };
 
   const handleRenderValue = (column: string, value: string, row: ICategory) => {
