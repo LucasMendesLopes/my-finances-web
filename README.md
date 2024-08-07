@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/assets/logos/logo.png" height="200px" alt="My Finances" />
+  <img src="./public/assets/logos/logo.png" alt="My Finances" />
 </p>
 
 # My Finances
