@@ -107,7 +107,7 @@ export const FinancesTable = ({
           </ButtonsContainer>
         </div>
       );
-    } else if (column === 'value') return <span style={{ color: row.category.type === "saida" ? colors.red : colors.green }}>{row.category.type === "saida" && "- "}R$ ${value}</span>;
+    } else if (column === 'value') return <span style={{ color: row.category.type === "saida" ? colors.red : colors.green }}>{row.category.type === "saida" && "- "}R$ {value}</span>;
 
     return value;
   };
