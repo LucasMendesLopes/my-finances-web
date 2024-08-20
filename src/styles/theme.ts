@@ -34,7 +34,9 @@ declare module '@mui/material/Typography' {
 
 export const theme = createTheme({
   components: {
-    MuiTableCell: { styleOverrides: { root: { fontSize: '1rem' } } },
+    MuiTableCell: {
+      styleOverrides: { root: { fontSize: '1.25rem', fontWeight: 500 } },
+    },
     MuiTooltip: {
       styleOverrides: {
         tooltip: {

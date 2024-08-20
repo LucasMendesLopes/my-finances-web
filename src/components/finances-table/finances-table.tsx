@@ -131,7 +131,7 @@ export const FinancesTable = ({
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
-                    style={{ width: column.width, fontWeight: 'bold', fontSize: '1.2rem' }}
+                    style={{ width: column.width, fontWeight: 'bold', fontSize: '1.375rem' }}
                   >
                     <h3>{column.label}</h3>
                   </TableCell>
@@ -146,7 +146,7 @@ export const FinancesTable = ({
                     {columns.map((column) => {
                       const value = (row as { [k in string]: any })[column.id];
                       return (
-                        <TableCell key={column.id} style={{ fontSize: '1.2rem' }}>
+                        <TableCell key={column.id}>
                           {handleRenderValue(column.id, value, row)}
                         </TableCell>
                       );

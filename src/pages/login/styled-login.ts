@@ -60,7 +60,7 @@ export const ButtonContainer = styled.div`
 export const RegisterRedirect = styled.div`
   display: flex;
   gap: 5px;
-  font-weight: bold;
+  font-weight: 900;
   font-size: 1.2rem;
 
   span {

@@ -24,8 +24,8 @@ export const TitleContainer = styled.div`
 
   #title {
     color: ${colors.grey100};
-    font-weight: bold;
-    font-size: 1.5rem;
+    font-weight: 900;
+    font-size: 1.625rem;
   }
 
   #icon {
@@ -41,7 +41,7 @@ export const TitleContainer = styled.div`
 export const CardValue = styled.span<{ value?: number }>`
   color: ${({ value }) => (value && value < 0 ? colors.red : colors.grey200)};
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

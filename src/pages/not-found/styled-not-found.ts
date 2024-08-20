@@ -15,7 +15,7 @@ export const Container = styled.div`
   p {
     text-align: center;
     width: 100%;
-    font-weight: bold;
+    font-weight: 900;
     color: ${colors.grey200};
   }
 
