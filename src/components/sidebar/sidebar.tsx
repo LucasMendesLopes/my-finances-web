@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '-src/hooks';
 import { colors } from '-src/styles/theme';
-import { Divider } from '@mui/material';
+import { Divider, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -89,37 +89,39 @@ export function Sidebar() {
 
                 <List>
                     {items.map((item, index) => (
-                        <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                                onClick={() => {
-                                    setOpen(false);
-                                    item.onClick()
-                                }}
-                            >
-                                <ListItemIcon
+                        <Tooltip placement="left" arrow title={item.text} disableHoverListener={open}>
+                            <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
+                                <ListItemButton
                                     sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
+                                    }}
+                                    onClick={() => {
+                                        setOpen(false);
+                                        item.onClick()
                                     }}
                                 >
-                                    {item.icon}
-                                </ListItemIcon>
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        {item.icon}
+                                    </ListItemIcon>
 
-                                <ListItemText primary={item.text} sx={{
-                                    opacity: open ? 1 : 0, "& .MuiTypography-root": {
-                                        fontSize: '1.25rem',
-                                        fontWeight: '600',
-                                        color: colors.grey100
-                                    }
-                                }} style={{ fontSize: '20rem' }} />
-                            </ListItemButton>
-                        </ListItem>
+                                    <ListItemText primary={item.text} sx={{
+                                        opacity: open ? 1 : 0, "& .MuiTypography-root": {
+                                            fontSize: '1.25rem',
+                                            fontWeight: '600',
+                                            color: colors.grey100
+                                        }
+                                    }} style={{ fontSize: '20rem' }} />
+                                </ListItemButton>
+                            </ListItem>
+                        </Tooltip>
                     ))}
                 </List>
             </Drawer>

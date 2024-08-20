@@ -17,6 +17,7 @@ import { ptBR } from 'date-fns/locale';
 import { X } from 'phosphor-react';
 
 import * as s from './styled-finances';
+import toast from 'react-hot-toast';
 
 interface FormData {
   date: Date | null;
@@ -39,7 +40,8 @@ export const Finances = () => {
   } = useFinances();
 
   const {
-    handleGetCategories
+    handleGetCategories,
+    categories
   } = useCategories();
 
   useEffect(() => {
@@ -61,6 +63,12 @@ export const Finances = () => {
     setPage(1);
 
     handleGetFinances(1, "", yearAndMonth);
+  }
+
+  const handleOpenModalAddFinance = () => {
+    if (categories.length === 0) return toast.error('Cadastre ao menos uma categoria')
+
+    setModalAddFinanceIsOpen(true)
   }
 
   return (
@@ -123,7 +131,7 @@ export const Finances = () => {
 
           <CustomButton
             text="Nova transação"
-            onClick={() => setModalAddFinanceIsOpen(true)}
+            onClick={handleOpenModalAddFinance}
           />
         </s.ButtonsFormContainer>
       </s.FiltersFormContainer>
